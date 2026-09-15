@@ -7,3 +7,4 @@ this log is the ground truth for total engineering time.
 |---|---|---|---|---|
 | 0 | Evidence, repo, scaffold, design system | 2026-09-15 20:47 PKT | 2026-09-15 21:35 PKT | ~0:48 |
 | 1 | Auth, DB layer, app shell, first deploy | 2026-09-15 21:36 PKT | 2026-09-15 22:43 PKT | ~1:07 |
+| 2 | Taxonomy pipeline, resolver, playground, logo, collapsible sidebar | 2026-09-15 22:50 PKT | 2026-09-15 23:16 PKT | ~0:26 |

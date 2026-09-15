@@ -63,4 +63,32 @@ export class AuthService {
     if (!user) throw new UnauthorizedException();
     return this.publicUser(user);
   }
+
+  async updateProfile(userId: string, name: string) {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { name: name.trim() },
+    });
+    return this.publicUser(user);
+  }
+
+  async changePassword(userId: string, current: string, next: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !bcrypt.compareSync(current, user.passwordHash)) {
+      throw new UnauthorizedException("Current password doesn't match");
+    }
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: bcrypt.hashSync(next, 10) },
+    });
+    return { ok: true };
+  }
+
+  async changePlan(userId: string, plan: 'FREE' | 'PRO' | 'TEAM') {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { plan },
+    });
+    return this.publicUser(user);
+  }
 }

@@ -90,16 +90,35 @@ Return STRICT JSON: {"subject": string, "body": string}. For LinkedIn, subject m
   }
 
   /** Natural-language search: prompt -> filter state (Instantly/Apollo pattern). */
-  async parseSearchPrompt(prompt: string, tab: 'people' | 'companies') {
+  async parseSearchPrompt(
+    prompt: string,
+    tab: 'people' | 'companies',
+    vocab?: { industries?: string[]; tech?: string[] },
+  ) {
     const schema =
       tab === 'people'
         ? `{"titles": string[], "seniorities": ("owner"|"founder"|"c_suite"|"vp"|"director"|"manager"|"senior"|"entry")[], "departments": ("engineering"|"sales"|"marketing"|"finance"|"hr"|"operations"|"product"|"legal")[], "industries": string[], "locations": string[], "employeesMin": number|null, "employeesMax": number|null, "q": string|null}`
         : `{"industries": string[], "locations": string[], "employeesMin": number|null, "employeesMax": number|null, "tech": string[], "q": string|null}`;
 
+    // Ground open-vocabulary filters in what the index actually contains,
+    // or "fintech" comes back verbatim and matches zero "Financial Services"
+    // rows.
+    const grounding = [
+      vocab?.industries?.length
+        ? `"industries" values MUST come from this exact list (map synonyms to the closest entries, e.g. fintech -> Financial Services; empty array if nothing fits): ${vocab.industries.join(' | ')}`
+        : '',
+      vocab?.tech?.length
+        ? `"tech" values MUST come from this exact list: ${vocab.tech.join(' | ')}`
+        : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
+
     const raw = await this.llm.complete(
       `Convert this lead-search request into filters. Request: "${prompt}"
 
-Rules: locations as "City, ST" for US cities or plain region names; employee ranges from phrases like "50-200 person" or "mid-size" (mid-size = 51..500); leave arrays empty when not mentioned; q only for free-text keywords that fit no filter.
+Rules: locations as "City, ST" for US cities; a bare US state becomes its 2-letter code (Texas -> TX), other regions stay plain names; employee ranges from phrases like "50-200 person" or "mid-size" (mid-size = 51..500); prefer the seniorities/departments enums over "titles" (add a title only for a role the enums cannot express); leave arrays empty when not mentioned; q only for free-text keywords that fit no filter.
+${grounding}
 Return STRICT JSON matching: ${schema}`,
       { json: true },
     );

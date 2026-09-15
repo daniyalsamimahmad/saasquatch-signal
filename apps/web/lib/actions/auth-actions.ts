@@ -1,11 +1,9 @@
 "use server";
 
 import { AuthError } from "next-auth";
-import bcrypt from "bcryptjs";
 import { signIn, signOut } from "@/auth";
-import { db } from "@/lib/db";
+import { apiFetch, ApiError } from "@/lib/api";
 import { loginSchema, signupSchema, DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/validators";
-import { rateLimit } from "@/lib/rate-limit";
 
 export type AuthFormState = {
   error?: string;
@@ -19,10 +17,6 @@ export async function loginAction(
   const parsed = loginSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     return { fieldErrors: parsed.error.flatten().fieldErrors };
-  }
-
-  if (!rateLimit(`login:${parsed.data.email}`, 5, 60_000)) {
-    return { error: "Too many attempts. Wait a minute and try again." };
   }
 
   try {
@@ -41,10 +35,7 @@ export async function loginAction(
 }
 
 export async function demoLoginAction(): Promise<AuthFormState> {
-  // The reviewer path: one click, zero typing. Rate limit still applies.
-  if (!rateLimit(`login:${DEMO_EMAIL}`, 5, 60_000)) {
-    return { error: "Too many attempts. Wait a minute and try again." };
-  }
+  // The reviewer path: one click, zero typing.
   try {
     await signIn("credentials", {
       email: DEMO_EMAIL,
@@ -54,7 +45,7 @@ export async function demoLoginAction(): Promise<AuthFormState> {
     return {};
   } catch (err) {
     if (err instanceof AuthError) {
-      return { error: "Demo sign-in failed. Run npm run seed, then retry." };
+      return { error: "Demo sign-in failed. Is the API running with seed data?" };
     }
     throw err;
   }
@@ -69,21 +60,18 @@ export async function signupAction(
     return { fieldErrors: parsed.error.flatten().fieldErrors };
   }
 
-  if (!rateLimit(`signup:${parsed.data.email}`, 5, 60_000)) {
-    return { error: "Too many attempts. Wait a minute and try again." };
-  }
-
   const { name, email, password } = parsed.data;
-  const existing = db()
-    .prepare("SELECT id FROM users WHERE email = ?")
-    .get(email);
-  if (existing) {
-    return { fieldErrors: { email: ["An account with this email already exists"] } };
+  try {
+    await apiFetch("/auth/register", {
+      method: "POST",
+      body: { name, email, password },
+    });
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 409) {
+      return { fieldErrors: { email: ["An account with this email already exists"] } };
+    }
+    return { error: "Could not create the account. Is the API running?" };
   }
-
-  db()
-    .prepare("INSERT INTO users (id, name, email, passwordHash) VALUES (?, ?, ?, ?)")
-    .run(`user_${crypto.randomUUID().slice(0, 8)}`, name, email, bcrypt.hashSync(password, 10));
 
   try {
     await signIn("credentials", { email, password, redirectTo: "/dashboard" });

@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsIn, IsString, MaxLength, MinLength } from 'class-validator';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CurrentUser } from './current-user.decorator';
@@ -27,6 +27,27 @@ class LoginDto {
   password!: string;
 }
 
+class ProfileDto {
+  @IsString()
+  @MinLength(2)
+  @MaxLength(80)
+  name!: string;
+}
+
+class PasswordDto {
+  @IsString()
+  current!: string;
+
+  @IsString()
+  @MinLength(8)
+  next!: string;
+}
+
+class PlanDto {
+  @IsIn(['FREE', 'PRO', 'TEAM'])
+  plan!: 'FREE' | 'PRO' | 'TEAM';
+}
+
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -49,5 +70,27 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   me(@CurrentUser() user: { id: string }) {
     return this.auth.me(user.id);
+  }
+
+  @Patch('profile')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  updateProfile(@CurrentUser() user: { id: string }, @Body() dto: ProfileDto) {
+    return this.auth.updateProfile(user.id, dto.name);
+  }
+
+  @Patch('password')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  changePassword(@CurrentUser() user: { id: string }, @Body() dto: PasswordDto) {
+    return this.auth.changePassword(user.id, dto.current, dto.next);
+  }
+
+  @Patch('plan')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  changePlan(@CurrentUser() user: { id: string }, @Body() dto: PlanDto) {
+    return this.auth.changePlan(user.id, dto.plan);
   }
 }

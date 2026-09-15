@@ -16,49 +16,64 @@ type Message = { role: "user" | "assistant"; text: string };
  */
 const KNOWLEDGE: Array<{ match: RegExp; answer: string }> = [
   {
-    match: /confiden|band|score|percent|%|block/i,
+    match: /ai search|natural|plain english|prompt|describe/i,
     answer:
-      "Every search gets a confidence score. 85% and above applies automatically, 60–84% applies with a flag, and below 60% the search is blocked so you never get confidently wrong results. Click “Why this match?” on any result page to see the full derivation.",
+      "On Find leads, type who you want in plain English — “CTOs at 50-200 person fintech companies in Texas” — and hit Search with AI. It fills the same filters you see in the left rail, so you can inspect and adjust everything it applied.",
   },
   {
-    match: /naics|taxonom|industr|categor/i,
+    match: /signal|hiring|funding|news|personali/i,
     answer:
-      "Industries here are canonical: 291 raw strings from the source data were cleaned, spell-corrected and collapsed into 32 categories, each mapped to a real NAICS code. Try the Resolver Playground in the sidebar to watch it work on any text you type.",
+      "Many contacts carry a signal chip — a concrete fact like a funding round or hiring spree. The AI writer opens step-1 emails by citing that signal, which is what makes them read like research instead of a blast.",
   },
   {
-    match: /typo|spell|misspell|correct/i,
+    match: /campaign|sequence|step|launch|generate/i,
     answer:
-      "Type industries however they come out. The resolver fixes typos before matching, so try “computr software” in the search and watch the correction chip appear.",
+      "Campaigns start from a four-field brief; the AI designs the whole sequence. Add contacts from a list, hit Generate drafts (step 1 is personalized per lead), review, then Launch. Follow-up steps schedule themselves on the queue after the configured wait days.",
+  },
+  {
+    match: /linkedin/i,
+    answer:
+      "LinkedIn steps become tasks, not automated sends — automation there violates LinkedIn's terms and gets accounts banned. Each task has an AI-drafted message: Copy & open puts it on your clipboard and opens the profile so you send it yourself.",
+  },
+  {
+    match: /valid|verify|bounce|mx|phone number/i,
+    answer:
+      "The Validate page checks emails (syntax, live MX lookup, disposable domains, role accounts) and phone numbers (format, allocated range, line type). Bulk mode takes up to 25 per batch and exports results as CSV.",
+  },
+  {
+    match: /verified|guessed|badge|email status/i,
+    answer:
+      "Every contact's email carries a status: a green check means verified, an amber question mark means pattern-guessed, and “No email” is exactly that. Launching a campaign skips contacts without an address instead of bouncing.",
+  },
+  {
+    match: /import|apollo|hunter|enrich|real data|live data/i,
+    answer:
+      "Import from web (on Find leads) pulls one company's live profile from Apollo by domain — and people with work emails via Hunter when a key is configured. Imports land in the same index as everything else.",
   },
   {
     match: /save|list|undo/i,
     answer:
-      "Select rows on any results page and hit “Save to list”. You can add to an existing list or create one on the spot, and the toast has an Undo that removes exactly what that save added.",
-  },
-  {
-    match: /outreach|draft|email|compose|context point/i,
-    answer:
-      "Select companies and click “Draft outreach”, or use “Draft outreach for all” on a list. Each draft arrives with three context points written from the lead's own data — industry, size and location. Edit anything, hit Regenerate for another take, then copy the email out.",
+      "Select rows on Find leads and hit Save to list — into an existing list or a new one on the spot. Lists feed campaigns: open one and use “Add all to campaign”.",
   },
   {
     match: /csv|export|excel|download/i,
     answer:
-      "Select rows and hit Export CSV, or export a whole list from its page. Files open cleanly in Excel, and the stored raw industry string is included next to the resolved one.",
+      "Select rows and hit Export CSV, or export a whole list from its page. Files open cleanly in Excel and are guarded against formula injection.",
   },
   {
     match: /plan|price|pricing|upgrade|pay|billing|subscription/i,
     answer:
-      "Your current plan shows in the top bar — click it to compare tiers. A quick note: billing in this build is simulated, so upgrading is instant and nothing is charged.",
+      "Your current plan shows in the top bar — click it to compare tiers. Billing in this build is simulated, so switching is instant and nothing is charged.",
   },
   {
-    match: /search|find|filter|location|refine/i,
+    match: /search|find|filter|location|tech stack/i,
     answer:
-      "Pick an industry and a metro, then hit Find companies. The Refine section adds employee range, revenue band, founded year and a keyword. Typos in the industry box are fine — the resolver handles them.",
+      "Find leads has People and Companies tabs with a filter rail: titles, seniority, department, email status, industry, location, company size and tech stack. Filters live in the URL, so a search is shareable and the back button just works.",
   },
   {
-    match: /keyboard|shortcut|escape|accessib/i,
+    match: /brief|tone|writing|voice/i,
     answer:
-      "The pickers are fully keyboard-driven: type to filter, arrows to move, Enter to select, Escape to close. Everything in the app is reachable by Tab.",
+      "Settings → AI writing brief stores your offer, audience, tone, CTA and words to avoid. Every AI draft — campaign steps, personalized emails, LinkedIn messages — starts from it, so new campaigns prefill instantly.",
   },
   {
     match: /theme|dark|light|appearance/i,
@@ -68,22 +83,22 @@ const KNOWLEDGE: Array<{ match: RegExp; answer: string }> = [
   {
     match: /password|profile|name|account|setting/i,
     answer:
-      "Settings (bottom of the sidebar) covers your name, password and theme. Email stays fixed since it's your sign-in identity.",
+      "Settings (bottom of the sidebar) covers your name, password, AI writing brief, integrations and theme. Email stays fixed since it's your sign-in identity.",
   },
   {
     match: /hi|hello|hey|help|what can/i,
     answer:
-      "Hi! Ask me about searching, confidence bands, saving lists, outreach drafts, CSV export, or plans. Or tap one of the quick questions below.",
+      "Hi! Ask me about finding leads, AI search, campaigns, LinkedIn tasks, validation, lists, CSV export, or plans. Or tap one of the quick questions below.",
   },
 ];
 
 const FALLBACK =
-  "I don't have a good answer for that yet. I'm a small built-in helper, so try asking about search, confidence, lists, outreach, or plans.";
+  "I don't have a good answer for that yet. I'm a small built-in helper, so try asking about search, campaigns, validation, lists, or plans.";
 
 const QUICK_QUESTIONS = [
-  "What do the confidence bands mean?",
-  "How do I save companies to a list?",
-  "How does outreach prefill work?",
+  "How does AI search work?",
+  "How do campaigns send?",
+  "Why are LinkedIn steps manual?",
 ];
 
 function answerFor(text: string): string {

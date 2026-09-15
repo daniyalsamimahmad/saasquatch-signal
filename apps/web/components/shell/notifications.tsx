@@ -3,15 +3,15 @@
 import * as React from "react";
 import Link from "next/link";
 import { Bell } from "lucide-react";
-import type { NotificationItem } from "@/lib/queries";
+import type { NotificationItem } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
 const READ_KEY = "notifications-read-at";
 
-function timeAgo(sqliteUtc: string): string {
-  const then = new Date(sqliteUtc.replace(" ", "T") + "Z").getTime();
+function timeAgo(iso: string): string {
+  const then = new Date(iso).getTime();
   const mins = Math.max(0, Math.round((Date.now() - then) / 60000));
   if (mins < 1) return "just now";
   if (mins < 60) return `${mins}m ago`;
@@ -36,7 +36,7 @@ export function NotificationsBell({ items }: { items: NotificationItem[] }) {
     : 0;
 
   const markAllRead = () => {
-    const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const now = new Date().toISOString();
     try {
       localStorage.setItem(READ_KEY, now);
     } catch {}

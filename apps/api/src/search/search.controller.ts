@@ -39,11 +39,18 @@ export class SearchController {
     return this.search.facets();
   }
 
-  /** Natural-language prompt -> filter state. */
+  /** Natural-language prompt -> filter state, grounded in the live facets. */
   @Post('nl')
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
-  nl(@Body() dto: NlSearchDto) {
-    return this.ai.parseSearchPrompt(dto.prompt, dto.tab);
+  async nl(@Body() dto: NlSearchDto) {
+    const facets = (await this.search.facets()) as {
+      industries: { value: string }[];
+      tech: { value: string }[];
+    };
+    return this.ai.parseSearchPrompt(dto.prompt, dto.tab, {
+      industries: facets.industries.map((i) => i.value),
+      tech: facets.tech.map((t) => t.value),
+    });
   }
 
   /** Live import of real data for one domain (Apollo org + Hunter people). */

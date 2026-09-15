@@ -3,11 +3,13 @@ import type { NextAuthConfig } from "next-auth";
 /**
  * Edge-safe Auth.js configuration.
  *
- * middleware.ts compiles for the Edge runtime, which cannot load
- * better-sqlite3 (native module). So this file carries only the JWT/session
- * logic and route authorization — zero database imports. The full config
- * with the Credentials provider (bcrypt + SQLite) lives in auth.ts and runs
- * only in the Node.js runtime (server actions, route handlers).
+ * middleware.ts compiles for the Edge runtime, so this file carries only the
+ * JWT/session logic and route authorization — zero API calls. The Credentials
+ * provider (which talks to the NestJS API) lives in auth.ts and runs only in
+ * the Node.js runtime.
+ *
+ * The API's own JWT rides inside the Auth.js session token; server components
+ * and actions read it via session.apiToken and pass it as a Bearer header.
  */
 
 const PUBLIC_PATHS = ["/login", "/signup"];
@@ -31,10 +33,14 @@ export const authConfig = {
     },
     jwt({ token, user }) {
       if (user?.id) token.id = user.id;
+      if (user?.apiToken) token.apiToken = user.apiToken;
+      if (user?.plan) token.plan = user.plan;
       return token;
     },
     session({ session, token }) {
       if (token.id) session.user.id = token.id as string;
+      if (token.plan) session.user.plan = token.plan as string;
+      session.apiToken = (token.apiToken as string) ?? "";
       return session;
     },
   },

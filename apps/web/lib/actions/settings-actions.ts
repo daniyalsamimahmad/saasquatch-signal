@@ -1,53 +1,78 @@
 "use server";
 
-import bcrypt from "bcryptjs";
-import { auth } from "@/auth";
-import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
+import { apiFetch, ApiError } from "@/lib/api";
+import { requireSession } from "@/lib/session";
+import type { Plan, WritingBrief } from "@/lib/types";
 
-type ActionResult = { ok: true } | { ok: false; error: string };
+type Result = { ok: true } | { ok: false; error: string };
 
-const DEMO_RESET_MSG =
-  "Could not reach your account data. Sign in again and retry.";
+function fail(err: unknown): { ok: false; error: string } {
+  return {
+    ok: false,
+    error: err instanceof ApiError ? err.message : "Something went wrong. Try again.",
+  };
+}
 
-export async function updateProfile(name: string): Promise<ActionResult> {
-  const session = await auth();
-  const userId = session?.user?.id;
-  if (!userId) return { ok: false, error: "Not signed in." };
-  const trimmed = typeof name === "string" ? name.trim() : "";
-  if (trimmed.length < 2 || trimmed.length > 80)
-    return { ok: false, error: "Name must be 2–80 characters." };
+export async function updateProfile(name: string): Promise<Result> {
+  const session = await requireSession();
   try {
-    const changed = db()
-      .prepare("UPDATE users SET name = ? WHERE id = ?")
-      .run(trimmed, userId).changes;
-    if (!changed) return { ok: false, error: DEMO_RESET_MSG };
+    await apiFetch("/auth/profile", {
+      method: "PATCH",
+      body: { name },
+      token: session.apiToken,
+    });
+    revalidatePath("/", "layout");
     return { ok: true };
-  } catch {
-    return { ok: false, error: DEMO_RESET_MSG };
+  } catch (err) {
+    return fail(err);
   }
 }
 
 export async function changePassword(
   current: string,
   next: string,
-): Promise<ActionResult> {
-  const session = await auth();
-  const userId = session?.user?.id;
-  if (!userId) return { ok: false, error: "Not signed in." };
-  if (typeof next !== "string" || next.length < 8)
-    return { ok: false, error: "New password must be at least 8 characters." };
+): Promise<Result> {
+  const session = await requireSession();
   try {
-    const user = db()
-      .prepare("SELECT passwordHash FROM users WHERE id = ?")
-      .get(userId) as { passwordHash: string } | undefined;
-    if (!user) return { ok: false, error: DEMO_RESET_MSG };
-    const valid = await bcrypt.compare(current ?? "", user.passwordHash);
-    if (!valid) return { ok: false, error: "Current password doesn't match." };
-    db()
-      .prepare("UPDATE users SET passwordHash = ? WHERE id = ?")
-      .run(bcrypt.hashSync(next, 10), userId);
+    await apiFetch("/auth/password", {
+      method: "PATCH",
+      body: { current, next },
+      token: session.apiToken,
+    });
     return { ok: true };
-  } catch {
-    return { ok: false, error: DEMO_RESET_MSG };
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export async function changePlan(plan: Plan): Promise<Result> {
+  const session = await requireSession();
+  try {
+    await apiFetch("/auth/plan", {
+      method: "PATCH",
+      body: { plan: plan.toUpperCase() },
+      token: session.apiToken,
+    });
+    revalidatePath("/", "layout");
+    return { ok: true };
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+/** Persist the reusable AI writing brief (Apollo "AI Content Center" pattern). */
+export async function saveBrief(brief: WritingBrief): Promise<Result> {
+  const session = await requireSession();
+  try {
+    await apiFetch("/ai/brief", {
+      method: "PUT",
+      body: brief,
+      token: session.apiToken,
+    });
+    revalidatePath("/settings");
+    return { ok: true };
+  } catch (err) {
+    return fail(err);
   }
 }

@@ -1,49 +1,50 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
+import { apiFetch } from "@/lib/api";
+import type { Contact, ListSummary, CampaignSummary, SearchResult } from "@/lib/types";
 
-/** Header search: companies, the user's lists, and their drafts. */
-export async function GET(request: Request) {
+/**
+ * ⌘K palette backend: one debounced query fans out to the API's people
+ * search plus the user's lists and campaigns (both small, filtered here).
+ */
+export async function GET(request: NextRequest) {
   const session = await auth();
-  const userId = session?.user?.id;
-  if (!userId) {
-    return NextResponse.json(
-      { companies: [], lists: [], drafts: [] },
-      { status: 401 },
-    );
+  if (!session?.apiToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { searchParams } = new URL(request.url);
-  const q = (searchParams.get("q") ?? "").trim();
+  const q = (request.nextUrl.searchParams.get("q") ?? "").trim();
   if (q.length < 2) {
-    return NextResponse.json({ companies: [], lists: [], drafts: [] });
+    return NextResponse.json({ people: [], lists: [], campaigns: [] });
   }
-  const like = `%${q.replace(/[\\%_]/g, (m) => `\\${m}`)}%`;
 
-  const companies = db()
-    .prepare(
-      `SELECT id, name, city, state FROM companies
-       WHERE name LIKE ? ESCAPE '\\' ORDER BY name LIMIT 5`,
-    )
-    .all(like);
+  const token = session.apiToken;
+  const [people, lists, campaigns] = await Promise.all([
+    apiFetch<SearchResult<Contact>>("/search/people", {
+      token,
+      searchParams: { q, perPage: 5 },
+    }).catch(() => ({ rows: [] as Contact[] })),
+    apiFetch<ListSummary[]>("/lists", { token }).catch(() => [] as ListSummary[]),
+    apiFetch<CampaignSummary[]>("/campaigns", { token }).catch(
+      () => [] as CampaignSummary[],
+    ),
+  ]);
 
-  const lists = db()
-    .prepare(
-      `SELECT l.id, l.name, COUNT(li.id) AS count
-       FROM lists l LEFT JOIN list_items li ON li.listId = l.id
-       WHERE l.userId = ? AND l.name LIKE ? ESCAPE '\\'
-       GROUP BY l.id ORDER BY l.updatedAt DESC LIMIT 5`,
-    )
-    .all(userId, like);
-
-  const drafts = db()
-    .prepare(
-      `SELECT d.id, d.subject, c.name AS companyName
-       FROM drafts d JOIN companies c ON c.id = d.companyId
-       WHERE d.userId = ? AND (d.subject LIKE ? ESCAPE '\\' OR c.name LIKE ? ESCAPE '\\')
-       ORDER BY d.createdAt DESC LIMIT 5`,
-    )
-    .all(userId, like, like);
-
-  return NextResponse.json({ companies, lists, drafts });
+  const needle = q.toLowerCase();
+  return NextResponse.json({
+    people: people.rows.map((c) => ({
+      id: c.id,
+      name: `${c.firstName} ${c.lastName}`,
+      title: c.title ?? "",
+      companyName: c.company?.name ?? "",
+    })),
+    lists: lists
+      .filter((l) => l.name.toLowerCase().includes(needle))
+      .slice(0, 5)
+      .map((l) => ({ id: l.id, name: l.name, count: l._count.items })),
+    campaigns: campaigns
+      .filter((c) => c.name.toLowerCase().includes(needle))
+      .slice(0, 5)
+      .map((c) => ({ id: c.id, name: c.name, status: c.status })),
+  });
 }

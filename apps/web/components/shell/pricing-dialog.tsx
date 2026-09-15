@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Check, Loader2, Gem } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { changePlan, type Plan } from "@/lib/actions/billing-actions";
+import { changePlan } from "@/lib/actions/settings-actions";
+import type { Plan } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -31,11 +32,11 @@ const TIERS: Array<{
     name: "Free",
     price: "$0",
     cadence: "forever",
-    blurb: "Everything you need to try the search.",
+    blurb: "Everything you need to try the platform.",
     features: [
-      "Industry resolver with NAICS mapping",
-      "Full search across 500 companies",
+      "People and company search with filters",
       "3 saved lists",
+      "Email and phone validation",
       "CSV export",
     ],
   },
@@ -44,14 +45,14 @@ const TIERS: Array<{
     name: "Pro",
     price: "$49",
     cadence: "per month",
-    blurb: "For a searcher running a real pipeline.",
+    blurb: "For a founder or SDR running a real pipeline.",
     highlight: true,
     features: [
       "Everything in Free",
-      "Unlimited saved lists",
-      "Outreach drafts with prefill",
-      "Search history and confidence analytics",
-      "Priority taxonomy updates",
+      "Unlimited lists and campaigns",
+      "AI-personalized email sequences",
+      "LinkedIn outreach tasks",
+      "Live enrichment credits",
     ],
   },
   {
@@ -59,11 +60,11 @@ const TIERS: Array<{
     name: "Team",
     price: "$149",
     cadence: "per month",
-    blurb: "Shared pipeline for small deal teams.",
+    blurb: "Shared pipeline for small go-to-market teams.",
     features: [
       "Everything in Pro",
       "5 seats with shared lists",
-      "Role-based access",
+      "Deep email verification",
       "API access",
     ],
   },

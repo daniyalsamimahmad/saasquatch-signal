@@ -4,11 +4,11 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
-  Building2,
+  User,
   FolderOpen,
   Send,
   LayoutDashboard,
-  FlaskConical,
+  ShieldCheck,
   Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,20 +24,20 @@ import {
 
 const PAGES = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Search companies", href: "/find", icon: Search },
-  { label: "Resolver Playground", href: "/playground", icon: FlaskConical },
-  { label: "Saved Lists", href: "/lists", icon: FolderOpen },
-  { label: "Outreach", href: "/outreach", icon: Send },
+  { label: "Find leads", href: "/find", icon: Search },
+  { label: "Lists", href: "/lists", icon: FolderOpen },
+  { label: "Campaigns", href: "/campaigns", icon: Send },
+  { label: "Validate", href: "/validate", icon: ShieldCheck },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 type Results = {
-  companies: Array<{ id: string; name: string; city: string; state: string }>;
+  people: Array<{ id: string; name: string; title: string; companyName: string }>;
   lists: Array<{ id: string; name: string; count: number }>;
-  drafts: Array<{ id: string; subject: string; companyName: string }>;
+  campaigns: Array<{ id: string; name: string; status: string }>;
 };
 
-const EMPTY: Results = { companies: [], lists: [], drafts: [] };
+const EMPTY: Results = { people: [], lists: [], campaigns: [] };
 
 export function GlobalSearch() {
   const router = useRouter();
@@ -92,9 +92,9 @@ export function GlobalSearch() {
 
   const hasResults =
     pages.length > 0 ||
-    results.companies.length > 0 ||
+    results.people.length > 0 ||
     results.lists.length > 0 ||
-    results.drafts.length > 0;
+    results.campaigns.length > 0;
 
   return (
     <>
@@ -123,7 +123,7 @@ export function GlobalSearch() {
       <CommandDialog open={open} onOpenChange={setOpen}>
         <Command>
         <CommandInput
-          placeholder="Companies, lists, drafts, pages"
+          placeholder="People, lists, campaigns, pages"
           value={query}
           onValueChange={setQuery}
         />
@@ -136,18 +136,19 @@ export function GlobalSearch() {
             </CommandEmpty>
           )}
 
-          {results.companies.length > 0 && (
-            <CommandGroup heading="Companies">
-              {results.companies.map((company) => (
+          {results.people.length > 0 && (
+            <CommandGroup heading="People">
+              {results.people.map((person) => (
                 <CommandItem
-                  key={company.id}
-                  value={`${company.name} ${company.city} ${company.id}`}
-                  onSelect={() => go(`/company/${company.id}`)}
+                  key={person.id}
+                  value={`${person.name} ${person.companyName} ${person.id}`}
+                  onSelect={() => go(`/find?q=${encodeURIComponent(person.name)}`)}
                 >
-                  <Building2 className="size-4 text-text-3" aria-hidden />
-                  <span className="flex-1 truncate">{company.name}</span>
-                  <span className="text-xs text-text-3">
-                    {company.city}, {company.state}
+                  <User className="size-4 text-text-3" aria-hidden />
+                  <span className="flex-1 truncate">{person.name}</span>
+                  <span className="max-w-44 truncate text-xs text-text-3">
+                    {person.title}
+                    {person.companyName ? ` · ${person.companyName}` : ""}
                   </span>
                 </CommandItem>
               ))}
@@ -172,19 +173,17 @@ export function GlobalSearch() {
             </CommandGroup>
           )}
 
-          {results.drafts.length > 0 && (
-            <CommandGroup heading="Outreach drafts">
-              {results.drafts.map((draft) => (
+          {results.campaigns.length > 0 && (
+            <CommandGroup heading="Campaigns">
+              {results.campaigns.map((campaign) => (
                 <CommandItem
-                  key={draft.id}
-                  value={`${draft.companyName} ${draft.subject} ${draft.id}`}
-                  onSelect={() => go(`/outreach/${draft.id}`)}
+                  key={campaign.id}
+                  value={`${campaign.name} ${campaign.id}`}
+                  onSelect={() => go(`/campaigns/${campaign.id}`)}
                 >
                   <Send className="size-4 text-text-3" aria-hidden />
-                  <span className="flex-1 truncate">{draft.companyName}</span>
-                  <span className="max-w-40 truncate text-xs text-text-3">
-                    {draft.subject}
-                  </span>
+                  <span className="flex-1 truncate">{campaign.name}</span>
+                  <span className="text-xs text-text-3 capitalize">{campaign.status}</span>
                 </CommandItem>
               ))}
             </CommandGroup>

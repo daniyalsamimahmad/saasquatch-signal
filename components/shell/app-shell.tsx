@@ -9,6 +9,7 @@ import type { Plan } from "@/lib/actions/billing-actions";
 import { PlanChip } from "./pricing-dialog";
 import { NotificationsBell } from "./notifications";
 import { HelpWidget } from "./help-widget";
+import { GlobalSearch } from "./global-search";
 import { BrandLockup, BrandMark } from "@/components/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarNav } from "./sidebar-nav";
@@ -146,6 +147,8 @@ export function AppShell({
               <PanelLeftClose className="size-4" aria-hidden />
             )}
           </Button>
+
+          <GlobalSearch />
 
           <div className="flex-1" />
 

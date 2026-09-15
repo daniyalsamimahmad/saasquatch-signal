@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { auth } from "@/auth";
+import { getUserProfile } from "@/lib/queries";
 import { PageHeader } from "@/components/page-header";
 import {
   ProfileForm,
@@ -11,17 +12,20 @@ export const metadata: Metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
   const session = await auth();
+  const profile = getUserProfile(session!.user!.id!);
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-5xl">
       <PageHeader title="Settings" description="Profile, password, and appearance." />
-      <div className="space-y-4">
+      <div className="grid gap-4 lg:grid-cols-2">
         <ProfileForm
-          initialName={session?.user?.name ?? ""}
-          email={session?.user?.email ?? ""}
+          initialName={profile?.name ?? ""}
+          email={profile?.email ?? ""}
         />
         <PasswordForm />
-        <AppearanceForm />
+        <div className="lg:col-span-2">
+          <AppearanceForm />
+        </div>
       </div>
     </div>
   );

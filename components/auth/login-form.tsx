@@ -38,7 +38,7 @@ export function LoginForm() {
     <div>
       <h1 className="text-xl font-bold">Sign in</h1>
       <p className="mt-1 text-sm text-text-2">
-        Reviewing this prototype? The demo account is one click away.
+        New here? The demo account gets you in with one click.
       </p>
 
       {/* The single most important element on this screen — see BUILD_SPEC §7.1 */}

@@ -7,6 +7,7 @@ import {
   getIndustryMix,
   getConfidenceDistribution,
   getRecentSearches,
+  getUserProfile,
 } from "@/lib/queries";
 import { PageHeader } from "@/components/page-header";
 import { IndustryMix } from "@/components/dashboard/industry-mix";
@@ -23,7 +24,7 @@ const HERO_SEARCH_URL =
 export default async function DashboardPage() {
   const session = await auth();
   const userId = session!.user!.id!;
-  const firstName = (session?.user?.name ?? "there").split(" ")[0];
+  const firstName = (getUserProfile(userId)?.name ?? "there").split(" ")[0];
   const stats = getDashboardStats(userId);
   const mix = getIndustryMix(userId);
   const distribution = getConfidenceDistribution(userId);
@@ -40,7 +41,7 @@ export default async function DashboardPage() {
     <div>
       <PageHeader
         title={`Welcome back, ${firstName}`}
-        description="Pipeline overview — these numbers update the moment you save a search result. In the original product they read 0 forever."
+        description="Your pipeline at a glance."
       />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
@@ -65,11 +66,11 @@ export default async function DashboardPage() {
           <Scale className="size-5 shrink-0 text-brand-600" aria-hidden />
           <span>
             <span className="block text-sm font-semibold">
-              See the resolver fix the law-firm bug
+              Watch the resolver handle a misspelled search
             </span>
             <span className="block text-xs text-text-2">
-              Their live app returns 150 law firms for “computer software in
-              Austin”. Watch the same search here — misspelled on purpose.
+              “computr software” in Austin, corrected and resolved to NAICS
+              541511 in one step.
             </span>
           </span>
         </span>
@@ -84,7 +85,7 @@ export default async function DashboardPage() {
           <CardContent>
             <h2 className="text-base font-semibold">Industry mix of saved leads</h2>
             <p className="mt-0.5 text-xs text-text-3">
-              Canonical industries only — readable because the taxonomy is clean.
+              Clean categories, straight from the resolver.
             </p>
             <div className="mt-4">
               <IndustryMix mix={mix} />
@@ -96,8 +97,7 @@ export default async function DashboardPage() {
           <CardContent>
             <h2 className="text-base font-semibold">Search confidence</h2>
             <p className="mt-0.5 text-xs text-text-3">
-              A metric their product cannot produce — its search never measures
-              how sure it is.
+              How sure the resolver was on your recent searches.
             </p>
             <div className="mt-4">
               <ConfidenceChart distribution={distribution} />
@@ -110,8 +110,7 @@ export default async function DashboardPage() {
         <CardContent>
           <h2 className="text-base font-semibold">Recent searches</h2>
           <p className="mt-0.5 text-xs text-text-3">
-            Click any row to re-run it — including the one the resolver refused
-            to guess.
+            Click a row to run it again.
           </p>
           <div className="mt-2">
             <RecentSearches searches={searches} />

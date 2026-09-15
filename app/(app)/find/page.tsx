@@ -9,7 +9,7 @@ export default function FindPage() {
     <div>
       <PageHeader
         title="Find companies"
-        description="Type an industry — typos welcome. The resolver corrects, maps to NAICS, and shows exactly what it matched. Below 60% confidence it blocks instead of guessing."
+        description="Search by industry and metro. Typos are fine, the resolver sorts them out."
       />
       <SearchForm />
     </div>

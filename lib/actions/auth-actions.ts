@@ -22,7 +22,7 @@ export async function loginAction(
   }
 
   if (!rateLimit(`login:${parsed.data.email}`, 5, 60_000)) {
-    return { error: "Too many attempts — wait a minute and try again." };
+    return { error: "Too many attempts. Wait a minute and try again." };
   }
 
   try {
@@ -43,7 +43,7 @@ export async function loginAction(
 export async function demoLoginAction(): Promise<AuthFormState> {
   // The reviewer path: one click, zero typing. Rate limit still applies.
   if (!rateLimit(`login:${DEMO_EMAIL}`, 5, 60_000)) {
-    return { error: "Too many attempts — wait a minute and try again." };
+    return { error: "Too many attempts. Wait a minute and try again." };
   }
   try {
     await signIn("credentials", {
@@ -54,7 +54,7 @@ export async function demoLoginAction(): Promise<AuthFormState> {
     return {};
   } catch (err) {
     if (err instanceof AuthError) {
-      return { error: "Demo sign-in failed — run `npm run seed` and retry." };
+      return { error: "Demo sign-in failed. Run npm run seed, then retry." };
     }
     throw err;
   }
@@ -70,7 +70,7 @@ export async function signupAction(
   }
 
   if (!rateLimit(`signup:${parsed.data.email}`, 5, 60_000)) {
-    return { error: "Too many attempts — wait a minute and try again." };
+    return { error: "Too many attempts. Wait a minute and try again." };
   }
 
   const { name, email, password } = parsed.data;
@@ -90,7 +90,7 @@ export async function signupAction(
     return {};
   } catch (err) {
     if (err instanceof AuthError) {
-      return { error: "Account created — sign in to continue." };
+      return { error: "Account created. Sign in to continue." };
     }
     throw err;
   }

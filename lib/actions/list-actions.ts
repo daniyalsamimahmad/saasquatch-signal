@@ -14,7 +14,7 @@ async function requireUser(): Promise<string | null> {
 }
 
 const DEMO_RESET_MSG =
-  "The demo database reset — sign in again and retry (hosted demo resets periodically).";
+  "Could not reach your account data. Sign in again and retry.";
 
 /**
  * F-04: their app discards search results — 150 found, dashboard reads 0,

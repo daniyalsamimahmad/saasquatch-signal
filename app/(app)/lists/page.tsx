@@ -27,7 +27,7 @@ export default async function ListsPage() {
     <div>
       <PageHeader
         title="Saved lists"
-        description="Search results live here instead of evaporating — the missing middle of the original product."
+        description="Everything you save from a search lands here."
       />
 
       {lists.length === 0 ? (
@@ -36,8 +36,8 @@ export default async function ListsPage() {
             <FolderOpen className="mx-auto size-8 text-text-3" aria-hidden />
             <p className="mt-4 text-sm font-medium">No lists yet</p>
             <p className="mt-1 text-sm text-text-2">
-              Run a search, select companies, and hit “Save to list” — they’ll
-              be waiting here.
+              Run a search, select a few companies, and save them. They&apos;ll
+              show up here.
             </p>
             <Button asChild className="mt-4" variant="outline">
               <Link href="/find">

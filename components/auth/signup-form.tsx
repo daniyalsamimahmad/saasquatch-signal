@@ -27,7 +27,7 @@ export function SignupForm() {
     <div>
       <h1 className="text-xl font-bold">Create your account</h1>
       <p className="mt-1 text-sm text-text-2">
-        Or skip the form —{" "}
+        Or skip the form and{" "}
         <Link
           href="/login"
           className="font-medium text-brand-600 underline-offset-4 hover:underline"

@@ -72,7 +72,7 @@ export function LocationPicker({
           <CommandList className="max-h-72">
             <CommandEmpty>
               <p className="px-4 py-2 text-sm text-text-2">
-                The demo dataset spans 25 US metros — try Austin, Seattle, Boston…
+                Try Austin, Seattle, or Boston. We cover 25 US metros.
               </p>
             </CommandEmpty>
             {byState.map(([state, metros]) => (

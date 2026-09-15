@@ -186,8 +186,8 @@ export function ResultsTable({
           <SearchX className="mx-auto size-8 text-text-3" aria-hidden />
           <p className="mt-4 text-sm font-medium">No companies match these filters</p>
           <p className="mt-1 text-sm text-text-2">
-            Try widening the employee range or removing the keyword — or pick a
-            nearby metro. The demo dataset holds 500 companies in 25 metros.
+            Try widening the employee range, dropping the keyword, or picking a
+            nearby metro.
           </p>
         </div>
       </div>
@@ -299,8 +299,8 @@ export function ResultsTable({
                             </span>
                           </TooltipTrigger>
                           <TooltipContent>
-                            Stored as “{row.rawIndustry}” in the source data —
-                            resolved by the taxonomy pipeline.
+                            Stored as “{row.rawIndustry}” in the source data.
+                            The resolver mapped it.
                           </TooltipContent>
                         </Tooltip>
                       )}

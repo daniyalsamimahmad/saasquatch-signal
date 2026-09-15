@@ -16,7 +16,7 @@ type ActionResult<T = object> =
   | { ok: false; error: string };
 
 const DEMO_RESET_MSG =
-  "The demo database reset — sign in again and retry (hosted demo resets periodically).";
+  "Could not reach your account data. Sign in again and retry.";
 
 /**
  * F-05: their Email Generator asks the human to type 60+ words of context

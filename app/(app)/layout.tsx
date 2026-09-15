@@ -1,6 +1,10 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getNavCounts, userExists } from "@/lib/queries";
+import {
+  getNavCounts,
+  getUserProfile,
+  getNotifications,
+} from "@/lib/queries";
 import { signOutAction } from "@/lib/actions/auth-actions";
 import { AppShell } from "@/components/shell/app-shell";
 
@@ -12,23 +16,23 @@ export default async function AppLayout({
   const session = await auth();
   if (!session?.user?.id) redirect("/login"); // middleware backstop
 
-  // The hosted demo's database resets per instance while 30-day JWT cookies
-  // outlive it: a session can reference a user that no longer exists. Sign
-  // those sessions out cleanly instead of letting writes fail downstream.
-  // (Cookie clearing must happen in a route handler, not a layout render.)
-  if (!userExists(session.user.id)) {
+  // Profile comes from the database, not the JWT, so renames show instantly.
+  // A missing profile means the session outlived a database reset: sign it
+  // out cleanly (cookie clearing must happen in a route handler, not here).
+  const profile = getUserProfile(session.user.id);
+  if (!profile) {
     redirect("/api/auth/stale");
   }
 
   const counts = getNavCounts(session.user.id);
+  const notifications = getNotifications(session.user.id);
 
   return (
     <AppShell
-      user={{
-        name: session.user.name ?? "User",
-        email: session.user.email ?? "",
-      }}
+      user={{ name: profile.name, email: profile.email }}
       counts={counts}
+      plan={profile.plan}
+      notifications={notifications}
       signOutAction={signOutAction}
     >
       {children}

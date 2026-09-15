@@ -50,11 +50,11 @@ export default async function ResultsPage({
         <div className="rounded-lg border border-conf-low/40 bg-conf-low-subtle p-5" role="alert">
           <p className="flex items-center gap-2 font-medium text-conf-low">
             <OctagonX className="size-4" aria-hidden />
-            Not confident enough to guess what{" "}
+            Couldn&apos;t confidently work out what{" "}
             <span className="font-mono">&quot;{q.trim() || "(empty)"}&quot;</span> means.
           </p>
           <p className="mt-2 text-sm text-text-2">
-            Their app answers this with 150 wrong companies. Pick what you meant:
+            Rather than guess, pick what you meant:
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {resolution.alternatives.map((alt) => (

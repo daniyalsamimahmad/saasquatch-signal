@@ -110,7 +110,7 @@ export function SearchForm() {
           />
           {touched && !industry && !blocked && (
             <p className="text-sm text-conf-low" role="alert">
-              Pick an industry — or type anything and let the resolver match it.
+              Pick an industry, or type anything and let the resolver match it.
             </p>
           )}
         </div>
@@ -166,12 +166,13 @@ export function SearchForm() {
           <div className="flex flex-wrap items-center gap-2">
             <OctagonX className="size-4 text-conf-low" aria-hidden />
             <p className="text-sm font-medium text-conf-low">
-              Not confident enough to guess ({blocked.confidence}% for{" "}
-              <span className="font-mono">&quot;{blocked.query.trim()}&quot;</span>) — search blocked.
+              Only {blocked.confidence}% confident about{" "}
+              <span className="font-mono">&quot;{blocked.query.trim()}&quot;</span>, so the
+              search was blocked.
             </p>
           </div>
           <p className="mt-2 text-sm text-text-2">
-            Their app would return 150 wrong companies here. Pick what you meant instead:
+            Rather than guess, pick what you meant:
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {blocked.alternatives.map((alt) => (

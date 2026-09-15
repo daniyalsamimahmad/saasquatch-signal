@@ -23,7 +23,7 @@ export function RecentSearches({ searches }: { searches: SearchRow[] }) {
   if (searches.length === 0) {
     return (
       <p className="py-8 text-center text-sm text-text-2">
-        Your searches will appear here — with the confidence each one resolved at.
+        Your searches will show up here, each with its confidence score.
       </p>
     );
   }
@@ -47,7 +47,7 @@ export function RecentSearches({ searches }: { searches: SearchRow[] }) {
                 <span className="block truncate text-xs text-text-3">
                   {industry
                     ? `→ ${industry.label} · ${row.resultCount} results`
-                    : "blocked — refused to guess"}
+                    : "blocked at low confidence"}
                 </span>
               </span>
               {row.band && row.confidence !== null && (

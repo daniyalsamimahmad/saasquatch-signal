@@ -238,7 +238,7 @@ export function ListDetail({
       {list.companies.length === 0 ? (
         <div className="grid place-items-center rounded-lg border border-dashed py-20 text-center">
           <p className="text-sm text-text-2">
-            This list is empty — save companies from a search to fill it.
+            This list is empty. Save companies from a search to fill it.
           </p>
         </div>
       ) : (

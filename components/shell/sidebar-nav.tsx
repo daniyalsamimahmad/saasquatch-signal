@@ -4,6 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, SETTINGS_ITEM, type NavCounts, type NavItem } from "./nav";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function NavLink({
   item,
@@ -22,12 +27,11 @@ function NavLink({
   const count = item.countKey ? counts[item.countKey] : undefined;
   const Icon = item.icon;
 
-  return (
+  const link = (
     <Link
       href={item.href}
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
-      title={rail ? item.label : undefined}
       className={cn(
         "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-text-2 transition-colors",
         "hover:bg-surface-2 hover:text-foreground",
@@ -42,7 +46,20 @@ function NavLink({
           {count}
         </span>
       )}
+      {rail && <span className="sr-only">{item.label}</span>}
     </Link>
+  );
+
+  if (!rail) return link;
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{link}</TooltipTrigger>
+      <TooltipContent side="right" sideOffset={6}>
+        {item.label}
+        {count !== undefined && count > 0 ? ` (${count})` : ""}
+      </TooltipContent>
+    </Tooltip>
   );
 }
 

@@ -39,7 +39,7 @@ export function TransparencyPanel({
           {keywordOnly ? (
             <span className="inline-flex items-center gap-1.5 rounded-md bg-conf-med-subtle px-2.5 py-1 text-sm font-medium text-conf-med">
               <Info className="size-4" aria-hidden />
-              Keyword search — no industry filter applied
+              Keyword search, no industry filter applied
             </span>
           ) : (
             <BandPill band={resolution.band} confidence={resolution.confidence} />

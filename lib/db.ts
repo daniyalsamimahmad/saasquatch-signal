@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS users (
   name         TEXT NOT NULL,
   email        TEXT NOT NULL UNIQUE,
   passwordHash TEXT NOT NULL,
+  plan         TEXT NOT NULL DEFAULT 'free' CHECK (plan IN ('free','pro','team')),
   createdAt    TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

@@ -64,7 +64,7 @@ export function SaveToListDialog({
     if (result.added === 0) {
       // Everything selected was already in the list — nothing to undo,
       // so no Undo action (it must never touch pre-existing entries).
-      toast(`Already in ${result.listName} — nothing new to save`);
+      toast(`Already in ${result.listName}. Nothing new to add.`);
       router.refresh();
       return;
     }
@@ -107,7 +107,7 @@ export function SaveToListDialog({
         <DialogHeader>
           <DialogTitle>Save {companyIds.length} to a list</DialogTitle>
           <DialogDescription>
-            Lists keep results from evaporating — pick one or start fresh.
+            Pick a list, or start a new one.
           </DialogDescription>
         </DialogHeader>
 

@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 type ActionResult = { ok: true } | { ok: false; error: string };
 
 const DEMO_RESET_MSG =
-  "The demo database reset — sign in again and retry (hosted demo resets periodically).";
+  "Could not reach your account data. Sign in again and retry.";
 
 export async function updateProfile(name: string): Promise<ActionResult> {
   const session = await auth();

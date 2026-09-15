@@ -2,13 +2,17 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, Database, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Menu, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { NotificationItem } from "@/lib/queries";
+import type { Plan } from "@/lib/actions/billing-actions";
+import { PlanChip } from "./pricing-dialog";
+import { NotificationsBell } from "./notifications";
+import { HelpWidget } from "./help-widget";
 import { BrandLockup, BrandMark } from "@/components/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarNav } from "./sidebar-nav";
 import type { NavCounts } from "./nav";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -43,11 +47,15 @@ function initials(name: string) {
 export function AppShell({
   user,
   counts,
+  plan,
+  notifications,
   signOutAction,
   children,
 }: {
   user: ShellUser;
   counts: NavCounts;
+  plan: Plan;
+  notifications: NotificationItem[];
   signOutAction: () => Promise<void>;
   children: React.ReactNode;
 }) {
@@ -141,16 +149,8 @@ export function AppShell({
 
           <div className="flex-1" />
 
-          {/* Data honesty: visible on every screen — BUILD_SPEC §5.2 */}
-          <Badge
-            variant="secondary"
-            className="gap-1.5 rounded-md text-xs font-medium text-text-2"
-            title="Companies in this prototype are synthetic. The resolver and NAICS mapping are real."
-          >
-            <Database className="size-3" aria-hidden />
-            Demo data
-          </Badge>
-
+          <PlanChip plan={plan} />
+          <NotificationsBell items={notifications} />
           <ThemeToggle />
 
           <DropdownMenu>
@@ -187,6 +187,7 @@ export function AppShell({
         </main>
       </div>
       <Toaster position="bottom-right" />
+      <HelpWidget />
     </div>
     </TooltipProvider>
   );

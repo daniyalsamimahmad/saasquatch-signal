@@ -29,7 +29,7 @@ export function ProfileForm({ initialName, email }: { initialName: string; email
             const result = await updateProfile(name);
             setPending(false);
             if (result.ok) {
-              toast.success("Profile updated — shows after your next sign-in");
+              toast.success("Profile updated.");
               router.refresh();
             } else {
               toast.error(result.error);
@@ -50,7 +50,7 @@ export function ProfileForm({ initialName, email }: { initialName: string; email
             <Label htmlFor="profile-email">Email</Label>
             <Input id="profile-email" value={email} disabled aria-readonly />
             <p className="text-xs text-text-3">
-              Email is fixed in the prototype — it&apos;s the sign-in identity.
+              Email stays fixed. It&apos;s how you sign in.
             </p>
           </div>
           <Button type="submit" disabled={pending || name.trim() === initialName}>
@@ -182,8 +182,7 @@ export function AppearanceForm() {
           })}
         </div>
         <p className="mt-3 text-xs text-text-3">
-          Both themes are first-class — every confidence colour is re-derived
-          for dark, not inverted.
+          Both themes are tuned by hand. Dark isn&apos;t just inverted light.
         </p>
       </CardContent>
     </Card>

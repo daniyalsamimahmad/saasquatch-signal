@@ -91,7 +91,7 @@ export function ComposeForm({
       const email = generateEmail(company, contact, canonical, nextPoints, variants[0]);
       setBody(email.body);
     } else {
-      toast("Point updated — body kept (you edited it). Use “Rebuild email from points” to sync.");
+      toast("Point updated. The email kept your edits; use “Rebuild email from points” to sync it.");
     }
   };
 

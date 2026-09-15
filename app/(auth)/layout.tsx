@@ -2,9 +2,9 @@ import { BrandLockup } from "@/components/brand";
 import { CircleCheck } from "lucide-react";
 
 const FIXES = [
-  "Industry search that resolves what you meant — and shows its work",
+  "Industry search that resolves what you meant and shows its work",
   "Refuses to guess below 60% confidence instead of returning wrong rows",
-  "Search → list → outreach without losing a single lead",
+  "Search, save, and reach out without losing a single lead",
 ];
 
 export default function AuthLayout({
@@ -22,8 +22,8 @@ export default function AuthLayout({
             A lead tool&apos;s currency is <span className="text-brand-600">trust</span>.
           </h1>
           <p className="mt-3 text-base text-text-2">
-            This prototype rebuilds SaaSquatch Leads around one idea: show the
-            user exactly what you matched, and never guess silently.
+            SaaSquatch Leads is built around one idea: show exactly what was
+            matched, and never guess silently.
           </p>
           <ul className="mt-8 space-y-3">
             {FIXES.map((fix) => (
@@ -35,7 +35,7 @@ export default function AuthLayout({
           </ul>
         </div>
         <p className="text-xs text-text-3">
-          Prototype rebuilt for Caprae Capital · synthetic demo data, clearly labelled
+          Find companies. Save the good ones. Reach out with context.
         </p>
       </aside>
 

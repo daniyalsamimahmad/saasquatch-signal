@@ -65,10 +65,12 @@ export function ConfidenceChart({
           <div key={col.key} className="flex w-full max-w-24 flex-col items-center gap-1">
             <span className="font-mono text-sm font-medium tnum">{col.n}</span>
             <div className="flex h-24 w-full items-end rounded-sm bg-surface-2/60">
-              <div
-                className={`w-full rounded-[4px] ${col.bar}`}
-                style={{ height: `${Math.max(4, (col.n / max) * 100)}%` }}
-              />
+              {col.n > 0 && (
+                <div
+                  className={`w-full rounded-[4px] ${col.bar}`}
+                  style={{ height: `${Math.max(6, (col.n / max) * 100)}%` }}
+                />
+              )}
             </div>
           </div>
         ))}

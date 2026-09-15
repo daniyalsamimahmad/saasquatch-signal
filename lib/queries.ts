@@ -7,6 +7,106 @@ export function userExists(userId: string): boolean {
   return !!db().prepare("SELECT 1 FROM users WHERE id = ?").get(userId);
 }
 
+export function getUserProfile(userId: string) {
+  return db()
+    .prepare("SELECT name, email, plan FROM users WHERE id = ?")
+    .get(userId) as
+    | { name: string; email: string; plan: "free" | "pro" | "team" }
+    | undefined;
+}
+
+export function getUserPlan(userId: string): "free" | "pro" | "team" {
+  const row = db()
+    .prepare("SELECT plan FROM users WHERE id = ?")
+    .get(userId) as { plan: string } | undefined;
+  return (row?.plan as "free" | "pro" | "team") ?? "free";
+}
+
+export type NotificationItem = {
+  id: string;
+  title: string;
+  detail: string;
+  createdAt: string; // ISO-ish sqlite datetime (UTC)
+  href: string;
+};
+
+/** Notifications derived from the user's own activity, newest first. */
+export function getNotifications(userId: string): NotificationItem[] {
+  const items: NotificationItem[] = [];
+
+  const searches = db()
+    .prepare(
+      `SELECT query, resolvedIndustryId, band, confidence, resultCount, createdAt
+       FROM search_logs WHERE userId = ? ORDER BY createdAt DESC LIMIT 3`,
+    )
+    .all(userId) as Array<{
+    query: string;
+    resolvedIndustryId: string | null;
+    band: string | null;
+    confidence: number | null;
+    resultCount: number;
+    createdAt: string;
+  }>;
+  for (const s of searches) {
+    items.push(
+      s.band === "low"
+        ? {
+            id: `search-${s.createdAt}-${s.query}`,
+            title: `Search blocked: "${s.query}"`,
+            detail: `Confidence was ${s.confidence}%, so nothing was guessed.`,
+            createdAt: s.createdAt,
+            href: "/find",
+          }
+        : {
+            id: `search-${s.createdAt}-${s.query}`,
+            title: `Search resolved: "${s.query}"`,
+            detail: `${s.resultCount} companies at ${s.confidence}% confidence.`,
+            createdAt: s.createdAt,
+            href: s.resolvedIndustryId
+              ? `/find/results?q=${encodeURIComponent(s.query)}&i=${s.resolvedIndustryId}`
+              : "/find",
+          },
+    );
+  }
+
+  const lists = db()
+    .prepare(
+      `SELECT l.id, l.name, l.updatedAt, COUNT(li.id) AS n
+       FROM lists l LEFT JOIN list_items li ON li.listId = l.id
+       WHERE l.userId = ? GROUP BY l.id ORDER BY l.updatedAt DESC LIMIT 2`,
+    )
+    .all(userId) as Array<{ id: string; name: string; updatedAt: string; n: number }>;
+  for (const l of lists) {
+    items.push({
+      id: `list-${l.id}-${l.updatedAt}`,
+      title: `${l.name} updated`,
+      detail: `${l.n} ${l.n === 1 ? "company" : "companies"} saved.`,
+      createdAt: l.updatedAt,
+      href: `/lists/${l.id}`,
+    });
+  }
+
+  const drafts = db()
+    .prepare(
+      `SELECT COUNT(*) AS n, MAX(createdAt) AS latest FROM drafts
+       WHERE userId = ? AND status IN ('draft','ready')`,
+    )
+    .get(userId) as { n: number; latest: string | null };
+  if (drafts.n > 0 && drafts.latest) {
+    items.push({
+      id: `drafts-${drafts.latest}`,
+      title: `${drafts.n} outreach ${drafts.n === 1 ? "draft" : "drafts"} waiting`,
+      detail: "Each one is prefilled from your lead data.",
+      createdAt: drafts.latest,
+      href: "/outreach",
+    });
+  }
+
+  return items
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+    .slice(0, 6);
+}
+
 export function getNavCounts(userId: string) {
   const lists = db()
     .prepare("SELECT COUNT(*) AS n FROM lists WHERE userId = ?")

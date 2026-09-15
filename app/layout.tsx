@@ -23,11 +23,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "SaaSquatch Leads — Prototype",
+    default: "SaaSquatch Leads",
     template: "%s · SaaSquatch Leads",
   },
   description:
-    "Quality-first rebuild of SaaSquatch Leads: an industry resolver that shows its work, and a search-to-outreach workflow that never loses a lead.",
+    "Find companies, resolve industries to real NAICS codes with confidence scores, and turn saved lists into outreach.",
 };
 
 export default function RootLayout({

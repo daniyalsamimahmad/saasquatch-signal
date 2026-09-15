@@ -20,7 +20,7 @@ export default async function OutreachPage() {
     <div>
       <PageHeader
         title="Outreach"
-        description="First drafts written from lead data the app already holds — industry, size, location, NAICS sector. You edit; nothing is hand-researched twice."
+        description="First drafts written from your lead data. You edit, then send."
       />
 
       {drafts.length === 0 ? (
@@ -30,7 +30,7 @@ export default async function OutreachPage() {
             <p className="mt-4 text-sm font-medium">No drafts queued</p>
             <p className="mt-1 text-sm text-text-2">
               Select companies in a search or open a list and hit “Draft
-              outreach” — the compose screen arrives prefilled.
+              outreach”. The compose screen shows up prefilled.
             </p>
             <Button asChild className="mt-4" variant="outline">
               <Link href="/lists">

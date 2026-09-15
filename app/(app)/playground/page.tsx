@@ -25,66 +25,68 @@ export default function PlaygroundPage() {
   const m = TAXONOMY.metrics;
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-6xl">
       <PageHeader
         title="Resolver playground"
-        description="Type any industry — including their production typos — and watch it normalise, correct, resolve, and map to a real NAICS code. This exact engine powers the search."
+        description="Type any industry, typos and all, and watch it resolve to a NAICS code."
       />
 
-      <div className="space-y-2">
-        <Label htmlFor="resolver-input">Industry phrase</Label>
-        <Input
-          id="resolver-input"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="e.g. computr software"
-          className="h-11 font-mono text-base"
-          autoComplete="off"
-          spellCheck={false}
-        />
-        <div className="flex flex-wrap gap-2 pt-1" aria-label="Example queries">
-          {EXAMPLES.map((ex) => (
-            <button
-              key={ex}
-              type="button"
-              onClick={() => setQuery(ex)}
-              className="rounded-md border bg-surface px-2.5 py-1 font-mono text-xs text-text-2 transition-colors hover:border-brand-500 hover:text-foreground"
-            >
-              {ex}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <Card className="mt-6 shadow-lift">
-        <CardContent>
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-5">
-            <BandPill band={result.band} confidence={result.confidence} />
-            {result.match && result.band !== "low" && (
-              <p className="text-sm">
-                {result.band === "high" ? "Showing" : "Suggesting"}{" "}
-                <span className="font-semibold">{result.match.label}</span>
-                <span className="ml-2 font-mono text-xs text-text-3">
-                  {result.match.sector}
-                </span>
-              </p>
-            )}
-            {result.band === "low" && (
-              <p className="text-sm text-conf-low">
-                Search would be blocked — not confident enough to guess.
-              </p>
-            )}
+      <div className="grid gap-6 lg:grid-cols-[minmax(280px,380px)_1fr]">
+        <div>
+          <div className="space-y-2">
+            <Label htmlFor="resolver-input">Industry phrase</Label>
+            <Input
+              id="resolver-input"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="e.g. computr software"
+              className="h-11 font-mono text-base"
+              autoComplete="off"
+              spellCheck={false}
+            />
           </div>
-          <DerivationChain result={result} />
-        </CardContent>
-      </Card>
+          <p className="label-caps mt-4 mb-2">Try one of these</p>
+          <div className="flex flex-wrap gap-2 lg:flex-col lg:items-start" aria-label="Example queries">
+            {EXAMPLES.map((ex) => (
+              <button
+                key={ex}
+                type="button"
+                onClick={() => setQuery(ex)}
+                className="rounded-md border bg-surface px-2.5 py-1 font-mono text-xs text-text-2 transition-colors hover:border-brand-500 hover:text-foreground"
+              >
+                {ex}
+              </button>
+            ))}
+          </div>
+          <p className="mt-6 hidden font-mono text-xs text-text-3 tnum lg:block">
+            {m.rawStrings} raw strings → {m.canonicalIndustries} canonical ·{" "}
+            {m.typosCorrected} typos fixed · 100% NAICS-mapped
+          </p>
+        </div>
 
-      <p className="mt-4 font-mono text-xs text-text-3 tnum">
-        Taxonomy: {m.rawStrings} raw production strings →{" "}
-        {m.canonicalIndustries} canonical industries ·{" "}
-        {m.caseDuplicatesCollapsed} case-duplicates collapsed ·{" "}
-        {m.typosCorrected} typos corrected · 100% NAICS-mapped
-      </p>
+        <Card className="shadow-lift">
+          <CardContent>
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-5">
+              <BandPill band={result.band} confidence={result.confidence} />
+              {result.match && result.band !== "low" && (
+                <p className="text-sm">
+                  {result.band === "high" ? "Showing" : "Suggesting"}{" "}
+                  <span className="font-semibold">{result.match.label}</span>
+                  <span className="ml-2 font-mono text-xs text-text-3">
+                    {result.match.sector}
+                  </span>
+                </p>
+              )}
+              {result.band === "low" && (
+                <p className="text-sm text-conf-low">
+                  Too uncertain to apply. A real search would be blocked here.
+                </p>
+              )}
+            </div>
+            <DerivationChain result={result} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

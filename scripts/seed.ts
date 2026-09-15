@@ -299,7 +299,7 @@ function main() {
 
   conn
     .prepare("INSERT INTO users (id, name, email, passwordHash) VALUES (?, ?, ?, ?)")
-    .run("user_demo", "Demo Searcher", DEMO_EMAIL, bcrypt.hashSync(DEMO_PASSWORD, 10));
+    .run("user_demo", "Daniyal Samim", DEMO_EMAIL, bcrypt.hashSync(DEMO_PASSWORD, 10));
 
   const generated = generateCompanies(500);
   // The walkthrough's hero search is "computer software in Austin, TX" —

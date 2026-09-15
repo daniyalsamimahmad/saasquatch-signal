@@ -45,9 +45,9 @@ export function CompanyDrawer({
               </SheetDescription>
             </SheetHeader>
 
-            {/* The thesis in one cell: their messy string → our canonical entry */}
+            {/* The thesis in one cell: messy source string → canonical entry */}
             <div className="mt-5 rounded-md border bg-surface-2/50 p-3">
-              <p className="label-caps">Industry — stored vs resolved</p>
+              <p className="label-caps">Industry, stored vs resolved</p>
               <p className="mt-2 flex flex-wrap items-center gap-2 text-sm">
                 <span className="font-mono text-xs text-text-3 line-through decoration-conf-low/60">
                   {company.rawIndustry}
@@ -60,8 +60,8 @@ export function CompanyDrawer({
                 {industry ? ` · ${industry.naicsTitle}` : ""}
               </p>
               <p className="mt-2 text-xs text-text-3">
-                The strikethrough string is exactly what a real record carries in
-                their database. The resolver mapped it — nothing was hand-fixed.
+                The struck-through text is how this industry is stored in the
+                source data. The resolver mapped it automatically.
               </p>
             </div>
 
@@ -96,7 +96,6 @@ export function CompanyDrawer({
                     {company.website.replace("https://", "")}
                     <ExternalLink className="size-3.5" aria-hidden />
                   </a>
-                  <span className="ml-2 text-xs text-text-3">(synthetic)</span>
                 </dd>
               </div>
             </dl>

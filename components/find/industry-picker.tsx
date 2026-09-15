@@ -168,8 +168,8 @@ export function IndustryPicker({
               ) : (
                 <p className="px-2 py-1 text-sm text-conf-low">
                   No confident match for{" "}
-                  <span className="font-mono text-xs">&quot;{query}&quot;</span> — would
-                  block rather than guess.
+                  <span className="font-mono text-xs">&quot;{query}&quot;</span>. A search
+                  would be blocked rather than guessed.
                 </p>
               )}
             </div>
@@ -180,7 +180,9 @@ export function IndustryPicker({
                 <p className="text-sm text-text-2">
                   Nothing in the list matches{" "}
                   <span className="font-mono">&quot;{query}&quot;</span>
-                  {resolution && resolution.alternatives.length > 0 ? " — closest:" : "."}
+                  {resolution && resolution.alternatives.length > 0
+                    ? ". Closest:"
+                    : "."}
                 </p>
                 {resolution && resolution.alternatives.length > 0 && (
                   <ul className="mt-2 space-y-1">

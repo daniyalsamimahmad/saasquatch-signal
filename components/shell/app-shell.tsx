@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, Database, LogOut } from "lucide-react";
+import { Menu, Database, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { BrandLockup, BrandMark } from "@/components/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarNav } from "./sidebar-nav";
@@ -49,27 +50,47 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  // User-collapsible on desktop, persisted per browser. Below lg the rail is
+  // automatic regardless; below md the sidebar becomes a drawer.
+  const [collapsed, setCollapsed] = React.useState(false);
+  React.useEffect(() => {
+    try {
+      setCollapsed(localStorage.getItem("sidebar-collapsed") === "1");
+    } catch {}
+  }, []);
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      try {
+        localStorage.setItem("sidebar-collapsed", prev ? "0" : "1");
+      } catch {}
+      return !prev;
+    });
+  };
 
   return (
     <div className="flex min-h-dvh">
-      {/* Sidebar: full at ≥1024px, icon rail at 768–1024px, drawer below */}
-      <aside className="sticky top-0 hidden h-dvh shrink-0 flex-col border-r bg-sidebar md:flex md:w-16 md:px-2 lg:w-[260px] lg:px-3">
+      {/* Sidebar: full at ≥1024px (collapsible), icon rail at 768–1024px, drawer below */}
+      <aside
+        className={cn(
+          "sticky top-0 hidden h-dvh shrink-0 flex-col border-r bg-sidebar md:flex md:w-16 md:px-2",
+          collapsed ? "lg:w-16 lg:px-2" : "lg:w-[260px] lg:px-3",
+        )}
+      >
         <div className="flex h-16 items-center px-1.5">
           <Link href="/dashboard" aria-label="SaaSquatch Leads — dashboard">
-            <span className="hidden lg:block">
+            <span className={cn("hidden", !collapsed && "lg:block")}>
               <BrandLockup />
             </span>
-            <span className="lg:hidden">
+            <span className={cn(!collapsed && "lg:hidden")}>
               <BrandMark />
             </span>
           </Link>
         </div>
         <div className="flex flex-1 flex-col overflow-y-auto pt-4 pb-4">
-          {/* rail vs full nav swap at the lg breakpoint */}
-          <div className="hidden flex-1 lg:flex lg:flex-col">
+          <div className={cn("hidden flex-1", !collapsed && "lg:flex lg:flex-col")}>
             <SidebarNav counts={counts} />
           </div>
-          <div className="flex flex-1 flex-col lg:hidden">
+          <div className={cn("flex flex-1 flex-col", !collapsed && "lg:hidden")}>
             <SidebarNav counts={counts} rail />
           </div>
         </div>
@@ -98,6 +119,22 @@ export function AppShell({
               </div>
             </SheetContent>
           </Sheet>
+
+          {/* Desktop sidebar collapse toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden lg:inline-flex"
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-pressed={collapsed}
+            onClick={toggleCollapsed}
+          >
+            {collapsed ? (
+              <PanelLeftOpen className="size-4" aria-hidden />
+            ) : (
+              <PanelLeftClose className="size-4" aria-hidden />
+            )}
+          </Button>
 
           <div className="flex-1" />
 

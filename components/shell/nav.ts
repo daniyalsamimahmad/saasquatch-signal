@@ -4,6 +4,7 @@ import {
   FolderOpen,
   Send,
   Settings,
+  FlaskConical,
   type LucideIcon,
 } from "lucide-react";
 
@@ -19,6 +20,7 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/find", label: "Search", icon: Search, group: "find" },
+  { href: "/playground", label: "Resolver Playground", icon: FlaskConical, group: "find" },
   { href: "/lists", label: "Saved Lists", icon: FolderOpen, group: "find", countKey: "lists" },
   { href: "/outreach", label: "Outreach", icon: Send, group: "act", countKey: "drafts" },
 ];

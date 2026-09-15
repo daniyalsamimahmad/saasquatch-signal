@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npm run seed && next build",
+    "build": "npm run seed && npm run taxonomy && next build",
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seed.ts",
     "seed:force": "tsx scripts/seed.ts --force",
-    "predev": "npm run seed"
+    "predev": "npm run seed",
+    "test": "vitest run",
+    "taxonomy": "tsx scripts/build-taxonomy.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

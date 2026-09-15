@@ -157,20 +157,27 @@ export function logSearch(args: {
   ) {
     return;
   }
-  db()
-    .prepare(
-      `INSERT INTO search_logs (id, userId, query, resolvedIndustryId, confidence, band, resultCount)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    )
-    .run(
-      `sl_${crypto.randomUUID().slice(0, 10)}`,
-      args.userId,
-      args.query,
-      args.resolvedIndustryId,
-      args.confidence,
-      args.band,
-      args.resultCount,
-    );
+  try {
+    db()
+      .prepare(
+        `INSERT INTO search_logs (id, userId, query, resolvedIndustryId, confidence, band, resultCount)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      )
+      .run(
+        `sl_${crypto.randomUUID().slice(0, 10)}`,
+        args.userId,
+        args.query,
+        args.resolvedIndustryId,
+        args.confidence,
+        args.band,
+        args.resultCount,
+      );
+  } catch {
+    // Telemetry must never take the page down. On the hosted demo the DB
+    // resets per instance while 30-day JWT sessions outlive it — a stale
+    // session's userId can be gone (FK failure). The layout signs those
+    // sessions out; this catch covers the race.
+  }
 }
 
 export function getContactsForCompany(companyId: string) {

@@ -3,6 +3,10 @@ import { db } from "@/lib/db";
 // Small typed read-model helpers. Counts feed the sidebar and dashboard —
 // the numbers that read `0` forever in the original product (F-04).
 
+export function userExists(userId: string): boolean {
+  return !!db().prepare("SELECT 1 FROM users WHERE id = ?").get(userId);
+}
+
 export function getNavCounts(userId: string) {
   const lists = db()
     .prepare("SELECT COUNT(*) AS n FROM lists WHERE userId = ?")

@@ -5,4 +5,5 @@ this log is the ground truth for total engineering time.
 
 | Sprint | Scope | Started | Stopped | Time |
 |---|---|---|---|---|
-| 0 | Evidence, repo, scaffold, design system | 2026-09-15 20:47 PKT | 2026-09-15 21:50 PKT | ~1:00 |
+| 0 | Evidence, repo, scaffold, design system | 2026-09-15 20:47 PKT | 2026-09-15 21:35 PKT | ~0:48 |
+| 1 | Auth, DB layer, app shell, first deploy | 2026-09-15 21:36 PKT | 2026-09-15 22:43 PKT | ~1:07 |

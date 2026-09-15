@@ -1,6 +1,6 @@
 # SaaSquatch Leads — quality-first rebuild
 
-> **Live demo:** _coming in Sprint 1_ — one-click demo sign-in, no signup
+> **Live demo:** [saasquatch-signal.vercel.app](https://saasquatch-signal.vercel.app) — one-click demo sign-in, no signup
 > **Video (90s):** _coming at submission_
 > **Run locally:** `npm i && npm run seed && npm run dev` → `demo@saasquatch.test` / `demo1234`
 

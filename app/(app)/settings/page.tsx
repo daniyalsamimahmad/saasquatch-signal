@@ -1,14 +1,28 @@
 import type { Metadata } from "next";
+import { auth } from "@/auth";
 import { PageHeader } from "@/components/page-header";
-import { ComingSoon } from "@/components/coming-soon";
+import {
+  ProfileForm,
+  PasswordForm,
+  AppearanceForm,
+} from "@/components/settings/settings-forms";
 
 export const metadata: Metadata = { title: "Settings" };
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const session = await auth();
+
   return (
-    <div>
-      <PageHeader title="Settings" description="Profile, password, and preferences." />
-      <ComingSoon sprint={5} what="Profile and preference controls" />
+    <div className="max-w-2xl">
+      <PageHeader title="Settings" description="Profile, password, and appearance." />
+      <div className="space-y-4">
+        <ProfileForm
+          initialName={session?.user?.name ?? ""}
+          email={session?.user?.email ?? ""}
+        />
+        <PasswordForm />
+        <AppearanceForm />
+      </div>
     </div>
   );
 }

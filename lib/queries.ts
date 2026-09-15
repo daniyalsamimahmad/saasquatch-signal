@@ -114,6 +114,51 @@ export function getCompany(companyId: string) {
     | undefined;
 }
 
+export function getIndustryMix(userId: string) {
+  return db()
+    .prepare(
+      `SELECT c.industryId, COUNT(DISTINCT c.id) AS n
+       FROM list_items li
+       JOIN lists l ON l.id = li.listId
+       JOIN companies c ON c.id = li.companyId
+       WHERE l.userId = ?
+       GROUP BY c.industryId ORDER BY n DESC LIMIT 8`,
+    )
+    .all(userId) as Array<{ industryId: string; n: number }>;
+}
+
+export function getConfidenceDistribution(userId: string) {
+  const rows = db()
+    .prepare(
+      `SELECT band, COUNT(*) AS n FROM search_logs
+       WHERE userId = ? AND band IS NOT NULL GROUP BY band`,
+    )
+    .all(userId) as Array<{ band: string; n: number }>;
+  const byBand = Object.fromEntries(rows.map((r) => [r.band, r.n]));
+  return {
+    low: byBand.low ?? 0,
+    medium: byBand.medium ?? 0,
+    high: byBand.high ?? 0,
+  };
+}
+
+export function getRecentSearches(userId: string, limit = 5) {
+  return db()
+    .prepare(
+      `SELECT query, resolvedIndustryId, confidence, band, resultCount, createdAt
+       FROM search_logs WHERE userId = ?
+       ORDER BY createdAt DESC LIMIT ?`,
+    )
+    .all(userId, limit) as Array<{
+    query: string;
+    resolvedIndustryId: string | null;
+    confidence: number | null;
+    band: string | null;
+    resultCount: number;
+    createdAt: string;
+  }>;
+}
+
 export function getDashboardStats(userId: string) {
   const totalLeads = db()
     .prepare(

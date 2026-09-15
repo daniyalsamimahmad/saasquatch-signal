@@ -143,11 +143,12 @@
   --border: var(--border-c);
   --input: var(--border-c);
   --ring: var(--brand-500);
+  /* categorical chart palette — validated (6 checks, incl. CVD) in light mode */
   --chart-1: #0d9488;
-  --chart-2: #4c7fa3;
-  --chart-3: #a66a08;
-  --chart-4: #72838e;
-  --chart-5: #1f8a54;
+  --chart-2: #b45309;
+  --chart-3: #4f46e5;
+  --chart-4: #15803d;
+  --chart-5: #9333ea;
   --sidebar: var(--surface);
   --sidebar-foreground: var(--text-2);
   --sidebar-primary: var(--brand-700);
@@ -197,11 +198,12 @@
   --border: var(--border-c);
   --input: var(--border-c);
   --ring: var(--brand-500);
-  --chart-1: #2ecfbc;
-  --chart-2: #6da3c9;
-  --chart-3: #d0a03f;
-  --chart-4: #8595a0;
-  --chart-5: #46b87a;
+  /* categorical chart palette — validated against the dark surface, not a flip */
+  --chart-1: #0d9488;
+  --chart-2: #d97706;
+  --chart-3: #6366f1;
+  --chart-4: #16a34a;
+  --chart-5: #a855f7;
   --sidebar: var(--surface);
   --sidebar-foreground: var(--text-2);
   --sidebar-primary: var(--brand-500);

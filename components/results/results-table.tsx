@@ -213,7 +213,55 @@ export function ResultsTable({
 
   return (
     <div>
-      <div className="overflow-x-auto rounded-lg border bg-card">
+      {/* Mobile: stacked cards, not a squeezed table (refutes F-09 directly) */}
+      <ul className="space-y-2 md:hidden">
+        {rows.map((row) => {
+          const canonical = industryById.get(row.industryId);
+          const rawDiffers =
+            canonical &&
+            row.rawIndustry.toLowerCase().trim() !== canonical.label.toLowerCase();
+          return (
+            <li
+              key={row.id}
+              className="rounded-lg border bg-card p-3"
+              onClick={() => setDrawerCompany(row)}
+            >
+              <div className="flex items-start gap-3">
+                <span onClick={(e) => e.stopPropagation()} className="pt-0.5">
+                  <Checkbox
+                    checked={selected.has(row.id)}
+                    onCheckedChange={() => toggle(row.id)}
+                    aria-label={`Select ${row.name}`}
+                  />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">{row.name}</p>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm">
+                    {rawDiffers && (
+                      <>
+                        <span className="max-w-40 truncate font-mono text-xs text-text-3 line-through decoration-conf-low/50">
+                          {row.rawIndustry}
+                        </span>
+                        <ArrowRight className="size-3 text-text-3" aria-hidden />
+                      </>
+                    )}
+                    <span>{canonical?.label ?? row.industryId}</span>
+                    <span className="rounded-sm bg-surface-2 px-1 py-0.5 font-mono text-[11px] text-text-2 tnum">
+                      {row.naicsCode}
+                    </span>
+                  </div>
+                  <p className="mt-1 font-mono text-xs text-text-2 tnum">
+                    {row.city}, {row.state} · {row.employeeCount.toLocaleString("en-US")}{" "}
+                    ppl · {row.revenueBand} · {row.foundedYear}
+                  </p>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-surface-2/80 backdrop-blur">
             <TableRow>

@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# keep the example env; keep the seeded db out
+!.env.example
+data/app.db
+data/app.db-*

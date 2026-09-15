@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 export type ShellUser = { name: string; email: string };
 
@@ -185,6 +186,7 @@ export function AppShell({
           {children}
         </main>
       </div>
+      <Toaster position="bottom-right" />
     </div>
     </TooltipProvider>
   );

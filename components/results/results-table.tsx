@@ -33,6 +33,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CompanyDrawer, type ContactRow } from "./company-drawer";
+import {
+  SaveToListDialog,
+  type ListOption,
+} from "@/components/lists/save-to-list-dialog";
+import { draftOutreach } from "@/lib/actions/outreach-actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const industryById = new Map<string, CanonicalIndustry>(
   INDUSTRIES.map((i) => [i.id, i]),
@@ -120,16 +127,44 @@ export function ResultsTable({
   total,
   page,
   perPage,
+  lists = [],
 }: {
   rows: CompanyRow[];
   contactsByCompany: Record<string, ContactRow[]>;
   total: number;
   page: number;
   perPage: number;
+  lists?: ListOption[];
 }) {
   const params = useSearchParams();
+  const router = useRouter();
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
   const [drawerCompany, setDrawerCompany] = React.useState<CompanyRow | null>(null);
+  const [saveOpen, setSaveOpen] = React.useState(false);
+  const [drafting, setDrafting] = React.useState(false);
+
+  const draftSelected = async () => {
+    setDrafting(true);
+    const result = await draftOutreach([...selected]);
+    setDrafting(false);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success(
+      result.created > 0
+        ? `${result.created} outreach draft${result.created === 1 ? "" : "s"} prefilled from lead data`
+        : "Drafts already exist for the selected companies",
+      {
+        action: {
+          label: "Open outreach",
+          onClick: () => router.push("/outreach"),
+        },
+      },
+    );
+    setSelected(new Set());
+    router.refresh();
+  };
 
   // Soft navigation preserves client state: without this, picks from a
   // previous page/sort survive invisibly and the CSV export silently drops
@@ -325,30 +360,24 @@ export function ResultsTable({
             <Download className="size-4" aria-hidden />
             Export CSV
           </Button>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span>
-                <Button size="sm" variant="outline" disabled>
-                  <FolderPlus className="size-4" aria-hidden />
-                  Save to list
-                </Button>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>Lands in Sprint 4 — the F-04 fix</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span>
-                <Button size="sm" variant="outline" disabled>
-                  <Send className="size-4" aria-hidden />
-                  Draft outreach
-                </Button>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>Lands in Sprint 4 — the F-05 fix</TooltipContent>
-          </Tooltip>
+          <Button size="sm" onClick={() => setSaveOpen(true)}>
+            <FolderPlus className="size-4" aria-hidden />
+            Save to list
+          </Button>
+          <Button size="sm" variant="outline" onClick={draftSelected} disabled={drafting}>
+            <Send className="size-4" aria-hidden />
+            Draft outreach
+          </Button>
         </div>
       )}
+
+      <SaveToListDialog
+        lists={lists}
+        companyIds={[...selected]}
+        open={saveOpen}
+        onOpenChange={setSaveOpen}
+        onSaved={() => setSelected(new Set())}
+      />
 
       <CompanyDrawer
         company={drawerCompany}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { OctagonX } from "lucide-react";
 import { auth } from "@/auth";
 import { searchCompanies, logSearch, getContactsForCompany } from "@/lib/search";
+import { getListsForUser } from "@/lib/queries";
 import { resolveIndustry, INDUSTRIES } from "@/lib/taxonomy/resolve";
 import { TransparencyPanel } from "@/components/resolver/transparency-panel";
 import { ResultsTable } from "@/components/results/results-table";
@@ -127,6 +128,15 @@ export default async function ResultsPage({
           total={result.total}
           page={result.page}
           perPage={result.perPage}
+          lists={
+            session?.user?.id
+              ? getListsForUser(session.user.id).map((l) => ({
+                  id: l.id,
+                  name: l.name,
+                  count: l.count,
+                }))
+              : []
+          }
         />
       </div>
     </div>

@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS drafts (
   subject       TEXT NOT NULL DEFAULT '',
   body          TEXT NOT NULL DEFAULT '',
   contextPoints TEXT NOT NULL DEFAULT '[]',   -- JSON array of three generated context points
-  status        TEXT NOT NULL DEFAULT 'draft', -- 'draft' | 'ready' | 'sent'
+  status        TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','ready','sent')),
   createdAt     TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS idx_drafts_user ON drafts(userId, status);

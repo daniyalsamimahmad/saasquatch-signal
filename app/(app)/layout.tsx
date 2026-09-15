@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { getNavCounts, userExists } from "@/lib/queries";
 import { signOutAction } from "@/lib/actions/auth-actions";
 import { AppShell } from "@/components/shell/app-shell";
@@ -15,8 +15,9 @@ export default async function AppLayout({
   // The hosted demo's database resets per instance while 30-day JWT cookies
   // outlive it: a session can reference a user that no longer exists. Sign
   // those sessions out cleanly instead of letting writes fail downstream.
+  // (Cookie clearing must happen in a route handler, not a layout render.)
   if (!userExists(session.user.id)) {
-    await signOut({ redirectTo: "/login" });
+    redirect("/api/auth/stale");
   }
 
   const counts = getNavCounts(session.user.id);

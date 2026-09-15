@@ -64,8 +64,12 @@ services:
         condition: service_started
 
   seed:
-    build: ./apps/api
-    command: sh -c "npx prisma migrate deploy && node -r ts-node/register/transpile-only prisma/seed.ts || npx ts-node --transpile-only prisma/seed.ts"
+    # The build stage still has devDependencies (ts-node), which the
+    # slimmed runtime image deliberately drops.
+    build:
+      context: ./apps/api
+      target: build
+    command: sh -c "npx prisma migrate deploy && npx ts-node --transpile-only prisma/seed.ts"
     environment:
       DATABASE_URL: postgresql://leads:leads@postgres:5432/leads
     depends_on:

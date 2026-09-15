@@ -11,3 +11,6 @@ this log is the ground truth for total engineering time.
 | 3 | Picker (F-02 fix), search, 500-company seed, transparency panel, results | 2026-09-15 23:20 PKT | 2026-09-16 00:03 PKT | ~0:43 |
 | 4 | Saved lists + undo (F-04), outreach prefill (F-05), demo seed state | 2026-09-16 00:05 PKT | 2026-09-16 00:30 PKT | ~0:25 |
 | 5 | Dashboard charts (validated palette), settings, mobile cards, Lighthouse | 2026-09-16 00:32 PKT | 2026-09-16 00:56 PKT | ~0:24 |
+| 6 | Final README, after-shots, video script, business answers, v1.0 | 2026-09-16 00:57 PKT | 2026-09-16 01:08 PKT | ~0:11 |
+
+**Total tracked build time: ~4:24** (packaging included), across sessions on 15–16 Sep 2026.

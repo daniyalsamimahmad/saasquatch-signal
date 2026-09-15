@@ -33,6 +33,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CompanyDrawer, type ContactRow } from "./company-drawer";
+import { buildCsv, downloadCsv } from "@/lib/csv";
 import {
   SaveToListDialog,
   type ListOption,
@@ -82,19 +83,12 @@ function SortHeader({
 }
 
 function exportCsv(rows: CompanyRow[]) {
-  const esc = (value: string | number) => {
-    const raw = String(value);
-    // Formula-injection guard (OWASP): rawIndustry comes from a production
-    // database capture — never let a cell open as =/+/-/@ in Excel.
-    const s = /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
-    return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-  };
-  const header = [
-    "Company", "Canonical Industry", "NAICS", "Raw Industry (as stored)",
-    "City", "State", "Employees", "Revenue Band", "Founded", "Website",
-  ];
-  const lines = rows.map((r) =>
+  const csv = buildCsv(
     [
+      "Company", "Canonical Industry", "NAICS", "Raw Industry (as stored)",
+      "City", "State", "Employees", "Revenue Band", "Founded", "Website",
+    ],
+    rows.map((r) => [
       r.name,
       industryById.get(r.industryId)?.label ?? r.industryId,
       r.naicsCode,
@@ -105,20 +99,9 @@ function exportCsv(rows: CompanyRow[]) {
       r.revenueBand,
       r.foundedYear,
       r.website,
-    ]
-      .map(esc)
-      .join(","),
+    ]),
   );
-  // BOM so Excel reads UTF-8 (the revenue bands use – and $ symbols); CRLF per RFC 4180.
-  const blob = new Blob(["﻿" + [header.join(","), ...lines].join("\r\n")], {
-    type: "text/csv;charset=utf-8",
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "saasquatch-leads-export.csv";
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadCsv("saasquatch-leads-export.csv", csv);
 }
 
 export function ResultsTable({

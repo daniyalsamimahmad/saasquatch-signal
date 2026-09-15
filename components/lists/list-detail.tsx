@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import type { CompanyRow } from "@/lib/search";
 import { INDUSTRIES } from "@/lib/taxonomy/resolve";
+import { buildCsv, downloadCsv } from "@/lib/csv";
 import {
   renameList,
   duplicateList,
@@ -46,17 +47,12 @@ const industryById = new Map(INDUSTRIES.map((i) => [i.id, i]));
 type ListCompany = CompanyRow & { addedAt: string };
 
 function exportListCsv(name: string, rows: ListCompany[]) {
-  const esc = (value: string | number) => {
-    const raw = String(value);
-    const s = /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
-    return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-  };
-  const header = [
-    "Company", "Canonical Industry", "NAICS", "Raw Industry (as stored)",
-    "City", "State", "Employees", "Revenue Band", "Founded", "Website", "Added",
-  ];
-  const lines = rows.map((r) =>
+  const csv = buildCsv(
     [
+      "Company", "Canonical Industry", "NAICS", "Raw Industry (as stored)",
+      "City", "State", "Employees", "Revenue Band", "Founded", "Website", "Added",
+    ],
+    rows.map((r) => [
       r.name,
       industryById.get(r.industryId)?.label ?? r.industryId,
       r.naicsCode,
@@ -68,19 +64,9 @@ function exportListCsv(name: string, rows: ListCompany[]) {
       r.foundedYear,
       r.website,
       r.addedAt,
-    ]
-      .map(esc)
-      .join(","),
+    ]),
   );
-  const blob = new Blob(["﻿" + [header.join(","), ...lines].join("\r\n")], {
-    type: "text/csv;charset=utf-8",
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadCsv(`${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.csv`, csv);
 }
 
 export function ListDetail({

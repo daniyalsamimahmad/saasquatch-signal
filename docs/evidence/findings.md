@@ -38,7 +38,8 @@ Attorneys: 3 · Professional Services: 1`. **Zero software companies. No error. 
 The endpoint is namespaced `/naics/` — an industry-phrase → NAICS resolution layer was clearly
 the intended design. It does not exist, so the query silently falls through.
 
-Screenshots: `f01-law-firm-results.png`
+Screenshots: `f01-law-firm-results.png` (form + results + toolbar in one frame),
+`f01-150-results.png` ("Showing 1-25 of 150 results" with 6 pages of law firms)
 
 ## F-02 · CRITICAL — Autocomplete dropdowns never close and cover the submit button
 
@@ -114,3 +115,7 @@ keyword. A buy box cannot be expressed.
   modules badged "Soon" (AI Web Scanner, Financial Analysis).
 - Searching costs no credits (credits gate enrichment), so the broken search is free to hit —
   every user meets F-01 before ever paying.
+
+All stills in this folder are frames extracted from a continuous 3:43 screen recording of the
+live session (retained outside the repo — it is the source footage for the video walkthrough's
+opening segment).

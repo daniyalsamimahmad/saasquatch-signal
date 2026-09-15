@@ -56,7 +56,7 @@ export function NotificationsBell({ items }: { items: NotificationItem[] }) {
           {unread > 0 && (
             <span
               aria-hidden
-              className="absolute top-1.5 right-1.5 grid size-4 place-items-center rounded-full bg-conf-low font-mono text-[10px] font-semibold text-white tnum"
+              className="absolute top-1 right-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-conf-low px-[3px] font-mono text-[9px] leading-none font-semibold text-white ring-2 ring-background tnum"
             >
               {unread > 9 ? "9+" : unread}
             </span>

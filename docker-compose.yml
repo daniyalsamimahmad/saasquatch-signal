@@ -1,0 +1,90 @@
+name: saasquatch-leads
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: leads
+      POSTGRES_PASSWORD: leads
+      POSTGRES_DB: leads
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U leads"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./apps/api
+    environment:
+      DATABASE_URL: postgresql://leads:leads@postgres:5432/leads
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      WEB_ORIGIN: http://localhost:3000
+      APOLLO_API_KEY: ${APOLLO_API_KEY:-}
+      HUNTER_API_KEY: ${HUNTER_API_KEY:-}
+      BREVO_API_KEY: ${BREVO_API_KEY:-}
+      BREVO_SENDER_EMAIL: ${BREVO_SENDER_EMAIL:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      ZEROBOUNCE_API_KEY: ${ZEROBOUNCE_API_KEY:-}
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build: ./apps/api
+    command: sh -c "node dist/worker.js"
+    environment:
+      DATABASE_URL: postgresql://leads:leads@postgres:5432/leads
+      REDIS_URL: redis://redis:6379
+      BREVO_API_KEY: ${BREVO_API_KEY:-}
+      BREVO_SENDER_EMAIL: ${BREVO_SENDER_EMAIL:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    depends_on:
+      api:
+        condition: service_started
+
+  seed:
+    build: ./apps/api
+    command: sh -c "npx prisma migrate deploy && node -r ts-node/register/transpile-only prisma/seed.ts || npx ts-node --transpile-only prisma/seed.ts"
+    environment:
+      DATABASE_URL: postgresql://leads:leads@postgres:5432/leads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    profiles: ["seed"]
+
+  web:
+    build: ./apps/web
+    environment:
+      API_URL: http://api:4000/v1
+      NEXT_PUBLIC_API_URL: http://localhost:4000/v1
+      AUTH_SECRET: ${JWT_SECRET:-change-me-in-production}
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_started
+
+volumes:
+  pgdata:

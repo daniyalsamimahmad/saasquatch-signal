@@ -1,0 +1,289 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Identity & billing
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  plan         Plan     @default(FREE)
+  // Persisted AI writing brief (Apollo "AI Content Center" pattern):
+  // { offer, audience, tone, cta, avoidWords }
+  aiBrief      Json?
+  createdAt    DateTime @default(now())
+
+  lists         List[]
+  savedSearches SavedSearch[]
+  campaigns     Campaign[]
+  validations   ValidationResult[]
+  creditUsage   CreditUsage[]
+}
+
+enum Plan {
+  FREE
+  PRO
+  TEAM
+}
+
+// ---------------------------------------------------------------------------
+// Lead data (companies + people). Rows come from the seed or are imported
+// from Apollo at search time; `source` + `apolloId` keep provenance.
+// ---------------------------------------------------------------------------
+
+model Company {
+  id            String   @id @default(cuid())
+  apolloId      String?  @unique
+  source        String   @default("seed") // seed | apollo
+  name          String
+  domain        String?
+  website       String?
+  linkedinUrl   String?
+  industry      String?
+  keywords      String[] @default([])
+  employeeCount Int?
+  revenue       String?
+  foundedYear   Int?
+  city          String?
+  state         String?
+  country       String?
+  description   String?
+  techStack     String[] @default([])
+  raw           Json?
+  createdAt     DateTime @default(now())
+
+  contacts  Contact[]
+  listItems ListItem[]
+
+  @@index([industry])
+  @@index([employeeCount])
+  @@index([country, state, city])
+  @@index([name])
+}
+
+model Contact {
+  id          String      @id @default(cuid())
+  apolloId    String?     @unique
+  source      String      @default("seed")
+  companyId   String?
+  company     Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  firstName   String
+  lastName    String
+  title       String?
+  seniority   String? // owner | founder | c_suite | vp | director | manager | senior | entry
+  department  String? // engineering | sales | marketing | finance | hr | operations | ...
+  email       String?
+  emailStatus EmailStatus @default(UNKNOWN)
+  phone       String?
+  linkedinUrl String?
+  city        String?
+  state       String?
+  country     String?
+  // One concrete personalization signal, cited by the AI writer
+  // (ZoomInfo pattern): { kind: "hiring"|"funding"|"tech"|"news", text }
+  signal      Json?
+  raw         Json?
+  createdAt   DateTime    @default(now())
+
+  listItems        ListItem[]
+  campaignContacts CampaignContact[]
+  messages         Message[]
+
+  @@index([companyId])
+  @@index([title])
+  @@index([seniority])
+  @@index([department])
+  @@index([country, state, city])
+}
+
+enum EmailStatus {
+  VERIFIED
+  GUESSED
+  UNAVAILABLE
+  UNKNOWN
+}
+
+// ---------------------------------------------------------------------------
+// Lists & saved searches
+// ---------------------------------------------------------------------------
+
+model List {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  kind      String   @default("people") // people | companies
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items ListItem[]
+
+  @@index([userId])
+}
+
+model ListItem {
+  id        String   @id @default(cuid())
+  listId    String
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  addedAt   DateTime @default(now())
+
+  @@unique([listId, contactId])
+  @@unique([listId, companyId])
+  @@index([listId])
+}
+
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  tab       String // people | companies
+  filters   Json
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Outreach: campaigns -> steps -> per-contact messages
+// ---------------------------------------------------------------------------
+
+model Campaign {
+  id        String         @id @default(cuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  status    CampaignStatus @default(DRAFT)
+  // The 4-field brief (lemlist pattern): audience, valueProp, reason, tone
+  brief     Json?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  steps    CampaignStep[]
+  contacts CampaignContact[]
+  messages Message[]
+
+  @@index([userId])
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+model CampaignStep {
+  id         String  @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  order      Int
+  channel    Channel @default(EMAIL)
+  waitDays   Int     @default(0)
+  // Templates with {{first_name}} / {{company}} / {{title}} variables
+  subjectTpl String  @default("")
+  bodyTpl    String  @default("")
+
+  messages Message[]
+
+  @@unique([campaignId, order])
+}
+
+enum Channel {
+  EMAIL
+  LINKEDIN
+}
+
+model CampaignContact {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contactId  String
+  contact    Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  status     String   @default("pending") // pending | generating | ready | skipped
+  addedAt    DateTime @default(now())
+
+  @@unique([campaignId, contactId])
+  @@index([campaignId])
+}
+
+model Message {
+  id         String        @id @default(cuid())
+  campaignId String?
+  campaign   Campaign?     @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  stepId     String?
+  step       CampaignStep? @relation(fields: [stepId], references: [id], onDelete: SetNull)
+  contactId  String
+  contact    Contact       @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  channel    Channel
+  subject    String        @default("")
+  body       String
+  status     MessageStatus @default(DRAFT)
+  providerId String? // Brevo message id
+  error      String?
+  // Delivery events from the Brevo webhook: [{event, at}]
+  events     Json?
+  sentAt     DateTime?
+  createdAt  DateTime      @default(now())
+
+  @@index([campaignId, status])
+  @@index([contactId])
+}
+
+enum MessageStatus {
+  DRAFT
+  QUEUED
+  SENDING
+  SENT
+  DELIVERED
+  OPENED
+  FAILED
+  COPIED // LinkedIn compliant flow: message copied for manual send
+}
+
+// ---------------------------------------------------------------------------
+// Validators & usage accounting
+// ---------------------------------------------------------------------------
+
+model ValidationResult {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind       String // email | phone
+  input      String
+  normalized String?
+  verdict    String // valid | risky | invalid | unknown
+  score      Int? // 0-100
+  source     String // local | zerobounce | libphonenumber
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, kind, createdAt])
+  @@index([kind, input])
+}
+
+model CreditUsage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider  String // apollo | brevo | gemini | groq | zerobounce
+  action    String
+  cost      Int      @default(1)
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, provider, createdAt])
+}

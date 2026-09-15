@@ -41,3 +41,4 @@ data/app.db-*
 
 # docker volumes
 pgdata/
+.devpg/

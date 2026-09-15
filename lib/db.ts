@@ -21,7 +21,9 @@ function open(): Database.Database {
   if (process.env.VERCEL && !fs.existsSync(TMP_DB_PATH)) {
     fs.copyFileSync(SEED_DB_PATH, TMP_DB_PATH);
   }
-  const conn = new Database(target);
+  // fileMustExist: a missing seed must fail loudly — silently creating an
+  // empty database is exactly the silent-wrongness this project is about.
+  const conn = new Database(target, { fileMustExist: true });
   conn.pragma("journal_mode = WAL");
   conn.pragma("foreign_keys = ON");
   return conn;

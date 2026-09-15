@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
-import { ComingSoon } from "@/components/coming-soon";
+import { SearchForm } from "@/components/find/search-form";
 
 export const metadata: Metadata = { title: "Search" };
 
@@ -9,9 +9,9 @@ export default function FindPage() {
     <div>
       <PageHeader
         title="Find companies"
-        description="Search by industry and location. The Industry Resolver corrects typos, maps to NAICS, and shows exactly what it matched."
+        description="Type an industry — typos welcome. The resolver corrects, maps to NAICS, and shows exactly what it matched. Below 60% confidence it blocks instead of guessing."
       />
-      <ComingSoon sprint={3} what="The search form and Industry Resolver combobox" />
+      <SearchForm />
     </div>
   );
 }

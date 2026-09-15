@@ -12,26 +12,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { normalise } from "../lib/taxonomy/normalise";
 import { spellfix, BASE_VOCABULARY } from "../lib/taxonomy/spellfix";
-import {
-  CANONICAL,
-  RULES,
-  NON_SOFTWARE_RULES,
-  SOFTWAREISH,
-} from "../lib/taxonomy/canon";
+import { CANONICAL } from "../lib/taxonomy/canon";
+import { classify } from "../lib/taxonomy/classify";
 import type { Taxonomy } from "../lib/taxonomy/types";
 
 const RAW_PATH = path.join(process.cwd(), "data", "raw-industries.json");
 const OUT_PATH = path.join(process.cwd(), "data", "taxonomy.json");
-
-function classify(fixed: string): string | null {
-  const ruleSet = SOFTWAREISH.test(fixed) ? RULES : NON_SOFTWARE_RULES;
-  for (const [pattern, id] of ruleSet) {
-    if (pattern.test(fixed)) return id;
-  }
-  // softwareish but nothing matched → generic development bucket
-  if (SOFTWAREISH.test(fixed)) return "software-development";
-  return null;
-}
 
 function main() {
   const raw = JSON.parse(fs.readFileSync(RAW_PATH, "utf8")) as {

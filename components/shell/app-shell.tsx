@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export type ShellUser = { name: string; email: string };
 
@@ -68,6 +69,7 @@ export function AppShell({
   };
 
   return (
+    <TooltipProvider delayDuration={200}>
     <div className="flex min-h-dvh">
       {/* Sidebar: full at ≥1024px (collapsible), icon rail at 768–1024px, drawer below */}
       <aside
@@ -184,5 +186,6 @@ export function AppShell({
         </main>
       </div>
     </div>
+    </TooltipProvider>
   );
 }

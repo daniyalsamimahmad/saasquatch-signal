@@ -50,7 +50,7 @@ function Section({
       >
         <span className="flex-1 text-left">{title}</span>
         {activeCount > 0 && (
-          <span className="rounded-full bg-brand-500 px-1.5 py-px font-mono text-[10px] font-semibold text-white tnum">
+          <span className="rounded-full bg-primary px-1.5 py-px font-mono text-[10px] font-semibold text-primary-foreground tnum">
             {activeCount}
           </span>
         )}

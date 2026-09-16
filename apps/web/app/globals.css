@@ -101,6 +101,10 @@
 :root {
   /* brand: a deep, calm teal */
   --brand-050: #e6f7f4;
+  /* logo: teal lens, yellow footprint */
+  --logo-lens: #0d9488;
+  --logo-ring: #0b7d73;
+  --logo-print: #f7d354;
   --brand-500: #0fb5a2;
   --brand-600: #0d9488;
   --brand-700: #0b6e66; /* action colour: ≥4.5:1 with white text */
@@ -164,6 +168,10 @@
 
 .dark {
   --brand-050: #123f39;
+  /* logo: mint lens, dark footprint, so it holds up on dark surfaces */
+  --logo-lens: #2ecfbc;
+  --logo-ring: #24b3a2;
+  --logo-print: #06211d;
   --brand-500: #2ecfbc;
   --brand-600: #24b3a2;
   --brand-700: #2ecfbc; /* on dark, the bright teal carries dark text instead */

@@ -1,14 +1,24 @@
 <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .lens { fill: #0d9488; }
+    .ring { stroke: #0b7d73; }
+    .print { fill: #f7d354; }
+    @media (prefers-color-scheme: dark) {
+      .lens { fill: #2ecfbc; }
+      .ring { stroke: #24b3a2; }
+      .print { fill: #06211d; }
+    }
+  </style>
   <!-- lens -->
-  <circle cx="14" cy="14" r="10.5" fill="#F7D354" />
-  <circle cx="14" cy="14" r="10.5" stroke="#0d9488" stroke-width="2.6" />
+  <circle class="lens" cx="14" cy="14" r="10.5" />
+  <circle class="ring" cx="14" cy="14" r="10.5" stroke-width="2.6" />
   <!-- footprint: sole + heel + toes -->
-  <ellipse cx="13.6" cy="13.2" rx="3.6" ry="4.6" fill="#0d9488" />
-  <ellipse cx="14.4" cy="19.2" rx="2.5" ry="2.1" fill="#0d9488" />
-  <circle cx="9.6" cy="8.9" r="1.55" fill="#0d9488" />
-  <circle cx="13.1" cy="6.9" r="1.35" fill="#0d9488" />
-  <circle cx="16.6" cy="7.3" r="1.2" fill="#0d9488" />
-  <circle cx="19.2" cy="9.3" r="1.05" fill="#0d9488" />
+  <ellipse class="print" cx="13.6" cy="13.2" rx="3.6" ry="4.6" />
+  <ellipse class="print" cx="14.4" cy="19.2" rx="2.5" ry="2.1" />
+  <circle class="print" cx="9.6" cy="8.9" r="1.55" />
+  <circle class="print" cx="13.1" cy="6.9" r="1.35" />
+  <circle class="print" cx="16.6" cy="7.3" r="1.2" />
+  <circle class="print" cx="19.2" cy="9.3" r="1.05" />
   <!-- handle -->
-  <path d="M21.8 21.8 L28 28" stroke="#0d9488" stroke-width="3.4" stroke-linecap="round" />
+  <path class="ring" d="M21.8 21.8 L28 28" stroke-width="3.4" stroke-linecap="round" />
 </svg>

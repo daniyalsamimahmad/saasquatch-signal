@@ -2,7 +2,10 @@
 
 A B2B lead generation platform. Search a database of companies and decision makers, save the good ones into lists, and launch AI-personalized outreach over email and LinkedIn. Email and phone validation is built in, so bad data never reaches a campaign.
 
+**Live demo:** [saasquatch-signal.vercel.app](https://saasquatch-signal.vercel.app)
 **Demo sign-in:** `demo@saasquatch.test` / `demo1234` (or the one-click demo button on the login page)
+
+The first request after a quiet spell can take up to a minute while the free-tier API wakes up. Everything after that is instant.
 
 ## What it does
 

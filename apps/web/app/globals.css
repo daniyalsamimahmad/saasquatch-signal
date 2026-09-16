@@ -129,8 +129,11 @@
   --foreground: var(--text);
   --card: var(--surface);
   --card-foreground: var(--text);
-  --popover: var(--surface);
+  /* Floating layers: a warm tint plus a yellow ring so menus and pop-ups
+     clearly sit above the page instead of merging into it. */
+  --popover: #fffdf5;
   --popover-foreground: var(--text);
+  --popover-ring: rgb(214 173 44 / 0.45);
   --primary: var(--brand-700);
   --primary-foreground: #ffffff;
   --secondary: var(--surface-2);
@@ -184,8 +187,10 @@
   --foreground: var(--text);
   --card: var(--surface);
   --card-foreground: var(--text);
-  --popover: var(--surface);
+  /* Elevated a step above --surface, with the yellow ring for separation */
+  --popover: #1d2830;
   --popover-foreground: var(--text);
+  --popover-ring: rgb(247 211 84 / 0.45);
   --primary: var(--brand-500);
   --primary-foreground: #06211d;
   --secondary: var(--surface-2);

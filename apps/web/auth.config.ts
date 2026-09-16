@@ -4,7 +4,7 @@ import type { NextAuthConfig } from "next-auth";
  * Edge-safe Auth.js configuration.
  *
  * middleware.ts compiles for the Edge runtime, so this file carries only the
- * JWT/session logic and route authorization — zero API calls. The Credentials
+ * JWT/session logic and route authorization, zero API calls. The Credentials
  * provider (which talks to the NestJS API) lives in auth.ts and runs only in
  * the Node.js runtime.
  *

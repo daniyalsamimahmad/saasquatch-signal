@@ -1,10 +1,8 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Original mark, designed for this prototype (their sasquatch illustration is
- * their asset). Concept: a magnifying glass over a footprint — you track a
- * sasquatch by its footprints, and a footprint is literally a lead. Teal
- * brand DNA kept; the amber lens is a nod to the original logo's magnifier.
+ * The brand mark: a magnifying glass over a footprint. You track a
+ * sasquatch by its footprints, and a footprint is literally a lead.
  */
 export function LogoMark({ className }: { className?: string }) {
   return (

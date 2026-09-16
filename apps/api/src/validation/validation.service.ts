@@ -33,10 +33,10 @@ export type EmailVerdict = {
 
 /**
  * Tiered validation:
- *   instant  — syntax + MX DNS + disposable + role-account checks (free,
+ *   instant , syntax + MX DNS + disposable + role-account checks (free,
  *              unlimited, self-hosted; no SMTP handshake because cloud
  *              hosts block outbound port 25 and catch-alls defeat it)
- *   deep     — ZeroBounce mailbox-level check when a key is configured
+ *   deep    , ZeroBounce mailbox-level check when a key is configured
  *              (free tier: 100/month), cached in Postgres.
  */
 @Injectable()

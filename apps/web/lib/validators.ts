@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Shared between client forms and server actions — one source of truth.
+// Shared between client forms and server actions, one source of truth.
 
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email("Enter a valid email address"),

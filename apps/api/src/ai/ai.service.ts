@@ -50,7 +50,7 @@ export class AiService {
     const { channel, lead, brief } = input;
     const signalLine = lead.signal
       ? `Concrete signal about this lead (cite it naturally in the opener): ${lead.signal.text}`
-      : `No specific signal is known — do NOT invent facts about the company; open with a relevant, honest industry observation instead.`;
+      : `No specific signal is known, do NOT invent facts about the company; open with a relevant, honest industry observation instead.`;
 
     const constraints =
       channel === 'email'

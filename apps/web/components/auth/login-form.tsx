@@ -41,7 +41,7 @@ export function LoginForm() {
         New here? The demo account gets you in with one click.
       </p>
 
-      {/* The single most important element on this screen — see BUILD_SPEC §7.1 */}
+      {/* The single most important element on this screen: zero-friction entry */}
       <form action={demoAction} className="mt-6">
         <div className="rounded-lg border border-brand-500/40 bg-brand-50/50 p-4 dark:bg-brand-50/20">
           <Button type="submit" className="w-full" size="lg" disabled={demoPending}>

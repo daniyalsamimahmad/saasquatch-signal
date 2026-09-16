@@ -42,3 +42,6 @@ data/app.db-*
 # docker volumes
 pgdata/
 .devpg/
+
+# local editor/agent tooling
+.claude/

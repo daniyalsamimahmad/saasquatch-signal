@@ -80,7 +80,7 @@ export function AppShell({
   return (
     <TooltipProvider delayDuration={200}>
     <div className="flex min-h-dvh">
-      {/* Sidebar: full at ≥1024px (collapsible), icon rail at 768–1024px, drawer below */}
+      {/* Sidebar: full at ≥1024px (collapsible), icon rail at 768 to 1024px, drawer below */}
       <aside
         className={cn(
           "sticky top-0 hidden h-dvh shrink-0 flex-col border-r bg-sidebar md:flex md:w-16 md:px-2",

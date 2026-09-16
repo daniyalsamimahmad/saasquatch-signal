@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 /**
- * Apollo.io — live-verified capability map for FREE plan keys (Sept 2026):
+ * Apollo.io, live-verified capability map for FREE plan keys (Sept 2026):
  * organization enrichment by domain WORKS; people/company search endpoints
  * return API_INACCESSIBLE (paid plans only). So this provider does the one
  * thing the free tier does well: pull a real company record for a domain.

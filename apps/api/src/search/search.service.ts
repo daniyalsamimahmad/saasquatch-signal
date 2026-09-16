@@ -163,7 +163,7 @@ export class SearchService {
     return result;
   }
 
-  /** Filter-rail options, cached hard — these change only on import. */
+  /** Filter-rail options, cached hard, these change only on import. */
   async facets() {
     const cacheKey = 'search:facets';
     const cached = await this.cache.get(cacheKey);

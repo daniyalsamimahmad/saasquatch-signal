@@ -61,7 +61,7 @@ export async function deleteList(id: string): Promise<Result> {
   }
 }
 
-/** Save selected search rows into a list — optionally creating it first. */
+/** Save selected search rows into a list, optionally creating it first. */
 export async function saveToList(input: {
   listId?: string;
   newListName?: string;

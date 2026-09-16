@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 /**
  * Natural-language search (Apollo pattern): describe the audience, the AI
- * turns it into the same filter state the rail uses — inspectable and
+ * turns it into the same filter state the rail uses, inspectable and
  * editable, never a black box.
  */
 export function NlSearchBar({ tab }: { tab: "people" | "companies" }) {

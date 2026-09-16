@@ -13,7 +13,7 @@ export type HunterPerson = {
 };
 
 /**
- * Hunter.io Domain Search — real people (names, titles, work emails with a
+ * Hunter.io Domain Search, real people (names, titles, work emails with a
  * confidence score) for a company domain. Free plan: ~50 credits/month with
  * full API access; activates when HUNTER_API_KEY is configured.
  */

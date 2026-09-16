@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------------------------------------------------------------------------
-   SaaSquatch Signal design system — see BUILD_SPEC.md §9
-   Teal brand DNA retained from the original product, but deliberate:
+   SaaSquatch Leads design system
+   Teal brand DNA, applied deliberately:
    semantic confidence colours are separate from the brand accent,
    neutrals are cool with a slight blue bias, radius is a tighter 6px.
 --------------------------------------------------------------------------- */
@@ -55,7 +55,7 @@
   --color-brand-600: var(--brand-600);
   --color-brand-700: var(--brand-700);
 
-  /* confidence bands — never the brand colour */
+  /* confidence bands, never the brand colour */
   --color-conf-high: var(--conf-high);
   --color-conf-high-subtle: var(--conf-high-subtle);
   --color-conf-med: var(--conf-med);
@@ -69,7 +69,7 @@
   --color-text-2: var(--text-2);
   --color-text-3: var(--text-3);
 
-  /* radius — 6px base, a deliberate tighter choice than shadcn's default */
+  /* radius, 6px base, a deliberate tighter choice than shadcn's default */
   --radius-sm: calc(var(--radius) * 0.667); /* 4px */
   --radius-md: var(--radius);               /* 6px */
   --radius-lg: calc(var(--radius) * 1.333); /* 8px */
@@ -78,12 +78,12 @@
   --radius-3xl: calc(var(--radius) * 3.333);
   --radius-4xl: calc(var(--radius) * 4);
 
-  /* type scale — 1.25 ratio: 12 · 14 · 16 · 20 · 25 · 31 · 39 */
+  /* type scale, 1.25 ratio: 12 · 14 · 16 · 20 · 25 · 31 · 39 */
   --text-xs: 0.75rem;      /* 12 */
   --text-xs--line-height: 1rem;
-  --text-sm: 0.875rem;     /* 14 — body in dense table UI */
+  --text-sm: 0.875rem;     /* 14, body in dense table UI */
   --text-sm--line-height: 1.25rem;
-  --text-base: 1rem;       /* 16 — prose */
+  --text-base: 1rem;       /* 16, prose */
   --text-base--line-height: 1.5rem;
   --text-lg: 1.25rem;      /* 20 */
   --text-lg--line-height: 1.75rem;
@@ -99,13 +99,13 @@
 }
 
 :root {
-  /* brand — deeper, less candy than their teal-500 */
+  /* brand: a deep, calm teal */
   --brand-050: #e6f7f4;
   --brand-500: #0fb5a2;
   --brand-600: #0d9488;
   --brand-700: #0b6e66; /* action colour: ≥4.5:1 with white text */
 
-  /* neutrals — cool, slight blue bias (chosen, not inherited grey) */
+  /* neutrals, cool, slight blue bias (chosen, not inherited grey) */
   --bg: #f7f9fa;
   --surface: #ffffff;
   --surface-2: #eff3f5;
@@ -114,7 +114,7 @@
   --text-2: #46555f;
   --text-3: #5e707b;
 
-  /* semantic — confidence bands. NOT the brand colour. */
+  /* semantic, confidence bands. NOT the brand colour. */
   --conf-high: #1f8a54;
   --conf-high-subtle: #e7f3ec;
   --conf-med: #a66a08;
@@ -146,7 +146,7 @@
   --border: var(--border-c);
   --input: var(--border-c);
   --ring: var(--brand-500);
-  /* categorical chart palette — validated (6 checks, incl. CVD) in light mode */
+  /* categorical chart palette, validated (6 checks, incl. CVD) in light mode */
   --chart-1: #0d9488;
   --chart-2: #b45309;
   --chart-3: #4f46e5;
@@ -203,7 +203,7 @@
   --border: var(--border-c);
   --input: var(--border-c);
   --ring: var(--brand-500);
-  /* categorical chart palette — validated against the dark surface, not a flip */
+  /* categorical chart palette, validated against the dark surface, not a flip */
   --chart-1: #0d9488;
   --chart-2: #d97706;
   --chart-3: #6366f1;

@@ -1,8 +1,8 @@
 /**
- * CSV building — pure and unit-tested. RFC 4180 quoting, CRLF line ends,
- * a UTF-8 BOM for Excel, and an OWASP formula-injection guard (leading
- * = + - @ tab CR are neutralised — rawIndustry cells come from a captured
- * production database and must never execute in a spreadsheet).
+ * CSV building. RFC 4180 quoting, CRLF line ends, a UTF-8 BOM so Excel
+ * opens files cleanly, and an OWASP formula-injection guard: leading
+ * = + - @ tab CR are neutralised, because exported lead data ends up in
+ * spreadsheets and must never execute there.
  */
 
 export function escapeCsvCell(value: string | number): string {

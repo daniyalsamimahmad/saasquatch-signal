@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 /**
  * Compliant LinkedIn flow: the AI drafts the message, you send it yourself.
- * Copy puts it on the clipboard and opens the profile — no automation
+ * Copy puts it on the clipboard and opens the profile, no automation
  * touches LinkedIn (their ToS bans bots; accounts get banned for it).
  */
 export function LinkedInTasks({

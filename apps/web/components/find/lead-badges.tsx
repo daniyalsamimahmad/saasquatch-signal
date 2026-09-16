@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/tooltip";
 
 /**
- * Verified-email badge (Apollo/Hunter pattern): the status is the product —
- * a guessed address and a verified one are different assets.
+ * Verified-email badge (Apollo/Hunter pattern): the status is the product,
+ * since a guessed address and a verified one are different assets.
  */
 export function EmailStatusBadge({ status, email }: { status: EmailStatus; email: string | null }) {
   if (status === "VERIFIED") {

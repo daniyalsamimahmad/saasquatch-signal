@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "0.1.0",
-  "description": "SaaSquatch Leads API — NestJS, Postgres, Redis, BullMQ",
+  "description": "SaaSquatch Leads API: NestJS, Postgres, Redis, BullMQ",
   "private": true,
   "license": "MIT",
   "scripts": {

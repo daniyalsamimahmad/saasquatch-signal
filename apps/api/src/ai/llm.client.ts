@@ -2,8 +2,8 @@ import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common'
 
 /**
  * LLM access with graceful degradation:
- *   1. Gemini (free tier) — primary, tried across current model aliases
- *   2. Groq (free tier)  — fallback when Gemini is saturated
+ *   1. Gemini (free tier) is primary, tried across current model aliases
+ *   2. Groq (free tier) is the fallback when Gemini is saturated
  * Both are optional; callers must handle `enabled === false` (demo mode).
  */
 @Injectable()

@@ -30,7 +30,7 @@ export async function loginAction(
     if (err instanceof AuthError) {
       return { error: "That email and password don't match our records." };
     }
-    throw err; // NEXT_REDIRECT on success — let Next handle it
+    throw err; // NEXT_REDIRECT on success, let Next handle it
   }
 }
 

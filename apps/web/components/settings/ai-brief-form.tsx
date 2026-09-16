@@ -22,8 +22,8 @@ import {
 const TONES = ["direct", "friendly", "formal", "casual"];
 
 /**
- * The reusable writing brief: every AI draft — campaign steps, personalized
- * step-1 emails, LinkedIn messages — starts from these guardrails, so the
+ * The reusable writing brief: every AI draft, campaign steps, personalized
+ * step-1 emails, LinkedIn messages, starts from these guardrails, so the
  * copy sounds like you, not like a template.
  */
 export function AiBriefForm({ brief }: { brief: WritingBrief | null }) {

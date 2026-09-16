@@ -32,7 +32,7 @@ export function Pagination({
   return (
     <div className="flex items-center justify-between gap-3 pt-3">
       <p className="text-xs text-text-2">
-        <span className="font-mono tnum">{from.toLocaleString()}–{to.toLocaleString()}</span> of{" "}
+        <span className="font-mono tnum">{from.toLocaleString()}-{to.toLocaleString()}</span> of{" "}
         <span className="font-mono tnum">{total.toLocaleString()}</span>
       </p>
       <div className="flex items-center gap-1">

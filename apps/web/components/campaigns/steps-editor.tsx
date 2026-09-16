@@ -94,7 +94,7 @@ function StepCard({ campaignId, step }: { campaignId: string; step: CampaignStep
               </div>
             ) : (
               <p className="self-end pb-2 text-xs text-text-3">
-                LinkedIn messages have no subject — keep it under 280 characters.
+                LinkedIn messages have no subject. Keep it under 280 characters.
               </p>
             )}
             <div className="space-y-1.5">

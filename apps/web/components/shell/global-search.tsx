@@ -102,7 +102,7 @@ export function GlobalSearch() {
       <Button
         variant="outline"
         onClick={() => setOpen(true)}
-        className="hidden h-9 w-64 justify-start gap-2 bg-surface px-3 font-normal text-text-3 lg:flex"
+        className="hidden h-9 w-80 justify-start gap-2 bg-surface px-3 font-normal text-text-3 lg:flex xl:w-[26rem]"
       >
         <Search className="size-4" aria-hidden />
         <span className="flex-1 text-left text-sm">Search anything</span>

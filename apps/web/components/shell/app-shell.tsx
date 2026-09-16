@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Menu, LogOut, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NotificationItem, Plan } from "@/lib/types";
 import { PlanChip } from "./pricing-dialog";
@@ -88,7 +88,7 @@ export function AppShell({
         )}
       >
         <div className="flex h-16 items-center px-1.5">
-          <Link href="/dashboard" aria-label="SaaSquatch Leads — dashboard">
+          <Link href="/dashboard" aria-label="SaaSquatch Leads dashboard">
             <span className={cn("hidden", !collapsed && "lg:block")}>
               <BrandLockup />
             </span>
@@ -171,6 +171,12 @@ export function AppShell({
                 <p className="truncate text-xs font-normal text-text-3">{user.email}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/settings">
+                  <Settings className="size-4" aria-hidden />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <button
                   className="w-full"

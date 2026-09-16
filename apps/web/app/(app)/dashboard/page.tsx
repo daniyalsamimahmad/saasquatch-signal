@@ -21,33 +21,39 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-function StatTile({
-  icon: Icon,
-  label,
-  value,
-  href,
-}: {
+type Stat = {
   icon: typeof Users;
   label: string;
+  sub: string;
   value: number;
-  href?: string;
-}) {
-  const body = (
-    <Card className="transition-colors hover:border-brand-500/40">
-      <CardContent className="flex items-center gap-3 py-4">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand-600 dark:bg-brand-50/10 dark:text-brand-500">
-          <Icon className="size-4" aria-hidden />
-        </div>
-        <div className="min-w-0">
-          <p className="font-display text-xl font-bold tnum">
+  href: string;
+};
+
+/**
+ * One connected strip on desktop (cells split by hairlines), separate mini
+ * cards when it wraps on smaller screens.
+ */
+function StatStrip({ stats }: { stats: Stat[] }) {
+  return (
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-5 lg:gap-0 lg:overflow-hidden lg:rounded-xl lg:border lg:bg-card lg:shadow-xs">
+      {stats.map(({ icon: Icon, label, sub, value, href }) => (
+        <Link
+          key={label}
+          href={href}
+          className="group rounded-xl border bg-card px-5 py-4 transition-colors hover:bg-surface-2/50 max-lg:last:col-span-2 lg:rounded-none lg:border-0 lg:border-l lg:first:border-l-0"
+        >
+          <p className="flex items-center gap-1.5 text-xs font-medium text-text-3">
+            <Icon className="size-3.5" aria-hidden />
+            {label}
+          </p>
+          <p className="mt-2.5 font-display text-2xl leading-none font-bold tnum transition-colors group-hover:text-brand-600 dark:group-hover:text-brand-500">
             {value.toLocaleString()}
           </p>
-          <p className="truncate text-xs text-text-2">{label}</p>
-        </div>
-      </CardContent>
-    </Card>
+          <p className="mt-1.5 text-xs text-text-3">{sub}</p>
+        </Link>
+      ))}
+    </div>
   );
-  return href ? <Link href={href}>{body}</Link> : body;
 }
 
 const FUNNEL_STAGES = [
@@ -85,7 +91,7 @@ export default async function DashboardPage() {
     <>
       <PageHeader
         title={`Welcome back, ${firstName}`}
-        description="Your pipeline at a glance — find leads, save lists, and launch outreach."
+        description="Your pipeline at a glance: find leads, save lists, launch outreach."
         actions={
           <Button asChild>
             <Link href="/find">
@@ -96,13 +102,15 @@ export default async function DashboardPage() {
         }
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <StatTile icon={Building2} label="Companies in index" value={stats.index.companies} href="/find?tab=companies" />
-        <StatTile icon={Users} label="Contacts in index" value={stats.index.contacts} href="/find" />
-        <StatTile icon={FolderOpen} label="Saved leads" value={stats.pipeline.savedLeads} href="/lists" />
-        <StatTile icon={Send} label="Campaigns" value={stats.pipeline.campaigns} href="/campaigns" />
-        <StatTile icon={ShieldCheck} label="Validations run" value={emailChecks + phoneChecks} href="/validate" />
-      </div>
+      <StatStrip
+        stats={[
+          { icon: Building2, label: "Companies", sub: "in the searchable index", value: stats.index.companies, href: "/find?tab=companies" },
+          { icon: Users, label: "Contacts", sub: "with emails and signals", value: stats.index.contacts, href: "/find" },
+          { icon: FolderOpen, label: "Saved leads", sub: "across your lists", value: stats.pipeline.savedLeads, href: "/lists" },
+          { icon: Send, label: "Campaigns", sub: "sequences created", value: stats.pipeline.campaigns, href: "/campaigns" },
+          { icon: ShieldCheck, label: "Validations", sub: "email and phone checks", value: emailChecks + phoneChecks, href: "/validate" },
+        ]}
+      />
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {/* Outreach funnel */}

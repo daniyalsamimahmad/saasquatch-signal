@@ -15,7 +15,7 @@ const PILLARS: Array<{ icon: LucideIcon; text: string }> = [
   },
   {
     icon: Sparkles,
-    text: "AI writes outreach that cites a real signal — hiring, funding, news — never filler",
+    text: "AI outreach that opens with a real signal like hiring, funding, or news, not filler",
   },
   {
     icon: ShieldCheck,
@@ -61,9 +61,9 @@ function ProductVignette() {
           AI draft · step 1 of 3
         </p>
         <p className="mt-2 text-xs leading-relaxed text-text-2">
-          Hi Felix — 12 open engineering roles at Saltmeadow tells me pipeline
-          is about to matter more than headcount. Most VPs scaling that fast
-          hit the same wall…
+          Hi Felix, saw the 12 open engineering roles at Saltmeadow. When a
+          team scales that fast, pipeline starts to matter more than
+          headcount, and most VPs hit the same wall…
         </p>
       </div>
     </div>
@@ -97,15 +97,15 @@ export default function AuthLayout({
           <BrandLockup />
         </div>
 
-        <div className="relative max-w-md">
+        <div className="relative max-w-md lg:ml-8 xl:ml-16">
           <h1 className="font-display text-3xl leading-tight font-bold">
             Find the right leads.
             <br />
             Say the right <span className="text-brand-600 dark:text-brand-500">thing</span>.
           </h1>
           <p className="mt-3 text-base text-text-2">
-            A filterable B2B index paired with an AI outreach engine — from
-            search to sequence without leaving the app.
+            A filterable B2B index paired with an AI outreach engine, so you
+            go from search to sequence without leaving the app.
           </p>
 
           <ProductVignette />
@@ -122,7 +122,7 @@ export default function AuthLayout({
           </ul>
         </div>
 
-        <div className="relative flex items-center gap-2 text-xs text-text-3">
+        <div className="relative flex items-center gap-2 text-xs text-text-3 lg:ml-8 xl:ml-16">
           <span>
             <span className="font-mono font-semibold text-text-2 tnum">400</span> companies
           </span>

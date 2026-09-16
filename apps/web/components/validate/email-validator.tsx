@@ -59,8 +59,8 @@ export function EmailValidator() {
           </Button>
         </div>
         <p className="text-xs text-text-3">
-          Syntax, live MX lookup, disposable-domain and role-account checks —
-          instant and unlimited.
+          Syntax, live MX lookup, disposable domain and role account checks.
+          Instant and unlimited.
         </p>
 
         {result && (
@@ -78,7 +78,7 @@ export function EmailValidator() {
               <CheckRow
                 label="Disposable domain"
                 pass={!result.checks.disposable}
-                detail={result.checks.disposable ? "Yes — burner" : "No"}
+                detail={result.checks.disposable ? "Yes, burner domain" : "No"}
               />
               <CheckRow
                 label="Role account (info@, sales@…)"

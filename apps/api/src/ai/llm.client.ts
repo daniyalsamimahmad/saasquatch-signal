@@ -31,7 +31,7 @@ export class LlmClient {
       if (out !== null) return out;
     }
     throw new ServiceUnavailableException(
-      'AI providers are unavailable right now — try again in a minute.',
+      'AI providers are unavailable right now. Try again in a minute.',
     );
   }
 

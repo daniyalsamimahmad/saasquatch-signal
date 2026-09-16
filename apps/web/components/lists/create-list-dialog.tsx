@@ -51,7 +51,7 @@ export function CreateListDialog() {
         <DialogHeader>
           <DialogTitle>New list</DialogTitle>
           <DialogDescription>
-            A home for one segment — a persona, a territory, a play.
+            A home for one segment: a persona, a territory, a play.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">

@@ -7,7 +7,7 @@ import { apiFetch, ApiError } from "@/lib/api";
 import type { CampaignSummary, ListDetail } from "@/lib/types";
 import { PageHeader } from "@/components/page-header";
 import { ListCardMenu } from "@/components/lists/list-card-menu";
-import { ListItemsTable } from "@/components/lists/list-items-table";
+import { ListItemsTable, ListToolbar } from "@/components/lists/list-items-table";
 
 export const metadata: Metadata = { title: "List" };
 
@@ -43,9 +43,14 @@ export default async function ListDetailPage({
       <PageHeader
         title={list.name}
         description={`${list.items.length} ${list.kind === "people" ? "leads" : "companies"} · saved ${new Date(list.createdAt).toLocaleDateString()}`}
-        actions={<ListCardMenu listId={list.id} name={list.name} redirectOnDelete />}
+        actions={
+          <>
+            <ListToolbar list={list} campaigns={campaigns} />
+            <ListCardMenu listId={list.id} name={list.name} redirectOnDelete />
+          </>
+        }
       />
-      <ListItemsTable list={list} campaigns={campaigns} />
+      <ListItemsTable list={list} />
     </>
   );
 }

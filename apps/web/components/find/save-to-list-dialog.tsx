@@ -73,7 +73,7 @@ export function SaveToListDialog({
     const { added } = result.data!;
     toast.success(
       added === 0
-        ? "Already in that list — nothing new to add."
+        ? "Already in that list, nothing new to add."
         : `Saved ${added} ${added === 1 ? "lead" : "leads"} to the list.`,
     );
     setNewName("");
@@ -89,7 +89,7 @@ export function SaveToListDialog({
             Save {count} {count === 1 ? "lead" : "leads"} to a list
           </DialogTitle>
           <DialogDescription>
-            Lists feed campaigns — save now, launch outreach from the list later.
+            Lists feed campaigns. Save now, launch outreach from the list later.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">

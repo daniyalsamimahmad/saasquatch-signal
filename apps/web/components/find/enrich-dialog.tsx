@@ -63,8 +63,8 @@ export function EnrichDialog() {
         <DialogHeader>
           <DialogTitle>Import a company by domain</DialogTitle>
           <DialogDescription>
-            Pulls the live company profile from Apollo — and people with work
-            emails via Hunter when a key is configured — into your index.
+            Pulls the live company profile from Apollo into your index, plus
+            people with work emails when a Hunter key is configured.
           </DialogDescription>
         </DialogHeader>
         <div className="flex gap-2">

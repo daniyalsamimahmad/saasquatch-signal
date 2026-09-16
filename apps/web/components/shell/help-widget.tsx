@@ -18,12 +18,12 @@ const KNOWLEDGE: Array<{ match: RegExp; answer: string }> = [
   {
     match: /ai search|natural|plain english|prompt|describe/i,
     answer:
-      "On Find leads, type who you want in plain English — “CTOs at 50-200 person fintech companies in Texas” — and hit Search with AI. It fills the same filters you see in the left rail, so you can inspect and adjust everything it applied.",
+      "On Find leads, type who you want in plain English, something like “CTOs at 50-200 person fintech companies in Texas”, then hit Search with AI. It fills the same filters you see in the left rail, so you can inspect and adjust everything it applied.",
   },
   {
     match: /signal|hiring|funding|news|personali/i,
     answer:
-      "Many contacts carry a signal chip — a concrete fact like a funding round or hiring spree. The AI writer opens step-1 emails by citing that signal, which is what makes them read like research instead of a blast.",
+      "Many contacts carry a signal chip: a concrete fact like a funding round or hiring spree. The AI writer opens step-1 emails by citing that signal, which is what makes them read like research instead of a blast.",
   },
   {
     match: /campaign|sequence|step|launch|generate/i,
@@ -33,7 +33,7 @@ const KNOWLEDGE: Array<{ match: RegExp; answer: string }> = [
   {
     match: /linkedin/i,
     answer:
-      "LinkedIn steps become tasks, not automated sends — automation there violates LinkedIn's terms and gets accounts banned. Each task has an AI-drafted message: Copy & open puts it on your clipboard and opens the profile so you send it yourself.",
+      "LinkedIn steps become tasks, not automated sends, because automation there violates LinkedIn's terms and gets accounts banned. Each task has an AI-drafted message: Copy & open puts it on your clipboard and opens the profile so you send it yourself.",
   },
   {
     match: /valid|verify|bounce|mx|phone number/i,
@@ -48,12 +48,12 @@ const KNOWLEDGE: Array<{ match: RegExp; answer: string }> = [
   {
     match: /import|apollo|hunter|enrich|real data|live data/i,
     answer:
-      "Import from web (on Find leads) pulls one company's live profile from Apollo by domain — and people with work emails via Hunter when a key is configured. Imports land in the same index as everything else.",
+      "Import from web (on Find leads) pulls one company's live profile from Apollo by domain, plus people with work emails via Hunter when a key is configured. Imports land in the same index as everything else.",
   },
   {
     match: /save|list|undo/i,
     answer:
-      "Select rows on Find leads and hit Save to list — into an existing list or a new one on the spot. Lists feed campaigns: open one and use “Add all to campaign”.",
+      "Select rows on Find leads and hit Save to list. Pick an existing list or create one on the spot. Lists feed campaigns: open one and use “Add all to campaign”.",
   },
   {
     match: /csv|export|excel|download/i,
@@ -63,7 +63,7 @@ const KNOWLEDGE: Array<{ match: RegExp; answer: string }> = [
   {
     match: /plan|price|pricing|upgrade|pay|billing|subscription/i,
     answer:
-      "Your current plan shows in the top bar — click it to compare tiers. Billing in this build is simulated, so switching is instant and nothing is charged.",
+      "Your current plan shows in the top bar. Click it to compare tiers. Billing in this build is simulated, so switching is instant and nothing is charged.",
   },
   {
     match: /search|find|filter|location|tech stack/i,
@@ -73,7 +73,7 @@ const KNOWLEDGE: Array<{ match: RegExp; answer: string }> = [
   {
     match: /brief|tone|writing|voice/i,
     answer:
-      "Settings → AI writing brief stores your offer, audience, tone, CTA and words to avoid. Every AI draft — campaign steps, personalized emails, LinkedIn messages — starts from it, so new campaigns prefill instantly.",
+      "Settings → AI writing brief stores your offer, audience, tone, CTA and words to avoid. Every AI draft (campaign steps, personalized emails, LinkedIn messages) starts from it, so new campaigns prefill instantly.",
   },
   {
     match: /theme|dark|light|appearance/i,
@@ -211,18 +211,26 @@ export function HelpWidget() {
         </div>
       )}
 
-      <Button
-        size="icon"
-        className="fixed right-4 bottom-4 z-40 size-12 rounded-full shadow-lift"
+      {/* Labeled launcher: one yellow pill (the logo's lens color), so the
+          "Need help?" text is part of the button itself. */}
+      <button
+        type="button"
         aria-label={open ? "Close help" : "Open help"}
         onClick={() => setOpen((v) => !v)}
+        className={cn(
+          "fixed right-4 bottom-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full bg-[#F7D354] text-[#332B06] shadow-lift transition-all hover:bg-[#EFC63E] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-[#F7D354]/50 focus-visible:outline-none",
+          open ? "w-12" : "px-5",
+        )}
       >
         {open ? (
           <X className="size-5" aria-hidden />
         ) : (
-          <MessageCircle className="size-5" aria-hidden />
+          <>
+            <MessageCircle className="size-5 fill-current" aria-hidden />
+            <span className="text-sm font-semibold whitespace-nowrap">Need help?</span>
+          </>
         )}
-      </Button>
+      </button>
     </>
   );
 }

@@ -43,7 +43,7 @@ export function BulkValidator() {
   const run = async () => {
     if (values.length === 0 || busy) return;
     if (values.length > 25) {
-      toast.error("Up to 25 per batch — trim the list and run again.");
+      toast.error("That's over the 25 per batch limit. Trim the list and run again.");
       return;
     }
     setBusy(true);

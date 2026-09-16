@@ -55,7 +55,7 @@ export function AiBriefForm({ brief }: { brief: WritingBrief | null }) {
       toast.error(result.error);
       return;
     }
-    toast.success("Writing brief saved — new campaigns start from it.");
+    toast.success("Writing brief saved. New campaigns will start from it.");
     router.refresh();
   };
 

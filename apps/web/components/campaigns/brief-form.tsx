@@ -79,7 +79,7 @@ export function BriefForm({ savedBrief }: { savedBrief: WritingBrief | null }) {
             id="brief-audience"
             value={audience}
             onChange={(e) => setAudience(e.target.value)}
-            placeholder="CTOs and VPs of Engineering at 50–500 person software companies"
+            placeholder="CTOs and VPs of Engineering at 50-500 person software companies"
           />
         </div>
 
@@ -128,7 +128,7 @@ export function BriefForm({ savedBrief }: { savedBrief: WritingBrief | null }) {
 
         <div className="space-y-1.5">
           <Label htmlFor="brief-name">
-            Campaign name <span className="text-text-3">(optional — the AI names it otherwise)</span>
+            Campaign name <span className="text-text-3">(optional, the AI names it otherwise)</span>
           </Label>
           <Input
             id="brief-name"

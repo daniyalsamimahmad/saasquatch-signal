@@ -214,7 +214,7 @@ function TitleFilter() {
             add();
           }
         }}
-        placeholder="e.g. CTO — press Enter"
+        placeholder="Type a title, press Enter"
         className="h-8 text-sm"
       />
       {titles.length > 0 && (

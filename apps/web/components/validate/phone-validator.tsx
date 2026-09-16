@@ -92,8 +92,8 @@ export function PhoneValidator() {
           </Button>
         </div>
         <p className="text-xs text-text-3">
-          Format and allocated-range validation with line type — offline, so
-          it proves the number is real, not that the line is live.
+          Checks format, allocated range, and line type, all offline. That
+          proves the number is real, not that the line is live.
         </p>
 
         {result && (

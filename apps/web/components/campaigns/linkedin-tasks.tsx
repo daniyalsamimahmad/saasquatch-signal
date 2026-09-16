@@ -29,7 +29,7 @@ export function LinkedInTasks({
     try {
       await navigator.clipboard.writeText(task.body);
     } catch {
-      toast.error("Couldn't reach the clipboard — copy the text manually.");
+      toast.error("Couldn't reach the clipboard. Copy the text manually.");
       return;
     }
     setCopiedId(task.id);
@@ -61,9 +61,9 @@ export function LinkedInTasks({
       </CardHeader>
       <CardContent className="space-y-3">
         <p className="text-xs text-text-3">
-          Copy opens the profile with the message on your clipboard — you paste
-          and send it yourself, which keeps your account inside LinkedIn&apos;s
-          terms.
+          Copy puts the message on your clipboard and opens the profile. You
+          paste and send it yourself, which keeps your account inside
+          LinkedIn&apos;s terms.
         </p>
         {[...pending, ...done].map((task) => (
           <div

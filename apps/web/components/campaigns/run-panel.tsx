@@ -97,7 +97,7 @@ export function CampaignRunPanel({
       return;
     }
     toast.success(
-      `Writing drafts for ${result.data!.queued} contact${result.data!.queued === 1 ? "" : "s"} — step 1 is AI-personalized per lead.`,
+      `Writing drafts for ${result.data!.queued} contact${result.data!.queued === 1 ? "" : "s"}. Step 1 is personalized per lead.`,
     );
     router.refresh();
   };
@@ -112,7 +112,7 @@ export function CampaignRunPanel({
       return;
     }
     toast.success(
-      `Launched — ${result.data!.queued} email${result.data!.queued === 1 ? "" : "s"} queued. Follow-ups schedule automatically.`,
+      `Launched. ${result.data!.queued} email${result.data!.queued === 1 ? "" : "s"} queued, and follow-ups schedule themselves.`,
     );
     router.refresh();
   };
@@ -194,7 +194,7 @@ export function CampaignRunPanel({
             Launch {drafts > 0 ? `(${drafts} drafts)` : ""}
           </Button>
           <p className="text-center text-xs text-text-3">
-            Sending is simulated in this environment — the full queue, delivery
+            Sending is simulated in this environment. The queue, delivery
             events, and stats are real.
           </p>
         </div>
@@ -210,7 +210,7 @@ export function CampaignRunPanel({
           </DialogHeader>
           {lists.length === 0 ? (
             <p className="rounded-md border border-dashed p-4 text-center text-sm text-text-2">
-              No people lists yet — save leads from a search first.
+              No people lists yet. Save leads from a search first.
             </p>
           ) : (
             <div className="space-y-3">

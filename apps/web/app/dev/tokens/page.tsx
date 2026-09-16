@@ -29,7 +29,7 @@ const neutrals = [
 ];
 
 const scale = [
-  { px: "39", cls: "text-3xl", label: "Display — page titles" },
+  { px: "39", cls: "text-3xl", label: "Display: page titles" },
   { px: "31", cls: "text-2xl", label: "Section headings" },
   { px: "25", cls: "text-xl", label: "Card titles, stat values" },
   { px: "20", cls: "text-lg", label: "Subheadings" },
@@ -48,7 +48,7 @@ export default function TokensPage() {
           <p className="label-caps">SaaSquatch Signal · dev</p>
           <h1 className="mt-2 text-3xl font-bold">Design tokens</h1>
           <p className="mt-2 max-w-xl text-base text-text-2">
-            The design system from BUILD_SPEC.md §9 — teal brand DNA kept from
+            The design system from BUILD_SPEC.md §9. Teal brand DNA kept from
             the original product, semantic confidence colours kept separate
             from it, on a 4px grid with a 1.25 type scale.
           </p>
@@ -75,7 +75,7 @@ export default function TokensPage() {
           ))}
         </div>
 
-        <p className="label-caps mt-8">Neutrals — cool, slight blue bias</p>
+        <p className="label-caps mt-8">Neutrals: cool, slight blue bias</p>
         <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
           {neutrals.map((c) => (
             <div key={c.name} className="rounded-md border bg-surface p-2">
@@ -86,7 +86,7 @@ export default function TokensPage() {
         </div>
 
         <p className="label-caps mt-8">
-          Confidence bands — colour + label + icon, never colour alone
+          Confidence bands: colour + label + icon, never colour alone
         </p>
         <div className="mt-2 flex flex-wrap gap-3">
           <span className="inline-flex items-center gap-1.5 rounded-md bg-conf-high-subtle px-2.5 py-1 text-sm font-medium text-conf-high">
@@ -134,7 +134,7 @@ export default function TokensPage() {
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <div className="rounded-md border bg-surface p-4">
-            <p className="label-caps">Data register — JetBrains Mono</p>
+            <p className="label-caps">Data register: JetBrains Mono</p>
             <p className="mt-3 font-mono text-sm">
               NAICS 541511 · confidence 94%
             </p>
@@ -167,7 +167,7 @@ export default function TokensPage() {
       {/* Spacing */}
       <section aria-labelledby="space">
         <h2 id="space" className="text-xl font-semibold">
-          Spacing — 4px base
+          Spacing: 4px base
         </h2>
         <div className="mt-6 flex items-end gap-3">
           {spacing.map((s) => (
@@ -190,7 +190,7 @@ export default function TokensPage() {
           Interactive elements
         </h2>
         <p className="mt-2 text-sm text-text-2">
-          Hover, active, focus-visible (tab through), disabled — all four
+          Hover, active, focus-visible (tab through), disabled: all four
           states designed. Focus ring is 2px brand at 2px offset.
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-3">

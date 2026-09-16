@@ -120,7 +120,7 @@ export function ListCardMenu({
           <DialogHeader>
             <DialogTitle>Delete “{name}”?</DialogTitle>
             <DialogDescription>
-              The saved leads stay in the index — only the list goes away.
+              The saved leads stay in the index. Only the list goes away.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

@@ -69,8 +69,8 @@ export function NlSearchBar({ tab }: { tab: "people" | "companies" }) {
           }}
           placeholder={
             tab === "people"
-              ? 'Describe who you want — "CTOs at 50-200 person fintech companies in Texas"'
-              : 'Describe the companies — "healthcare software companies in Austin using AWS"'
+              ? 'Describe who you want, like "CTOs at 50-200 person fintech companies in Texas"'
+              : 'Describe the companies, like "healthcare software companies in Austin using AWS"'
           }
           className="h-10 pl-9"
         />

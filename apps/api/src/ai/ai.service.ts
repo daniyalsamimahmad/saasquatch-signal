@@ -140,6 +140,7 @@ Tone: ${brief.tone ?? 'direct but warm'}
 CTA: ${brief.cta ?? 'book a 15-minute call'}
 
 Steps alternate value angles (never repeat the same pitch), later steps get shorter, the last one is a polite breakup. Step 1 channel "email"; you may make one middle step "linkedin" (under 280 chars, empty subject). Use {{first_name}}, {{company}}, {{title}} variables naturally.
+Write like a busy human: plain punctuation only, never em-dashes, no "I hope this finds you well", no buzzwords.
 Return STRICT JSON: {"name": string, "steps": [{"channel": "email"|"linkedin", "waitDays": number, "subjectTpl": string, "bodyTpl": string}]}. waitDays of step 1 is 0.`,
       { json: true },
     );

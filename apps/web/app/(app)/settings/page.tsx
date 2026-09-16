@@ -64,7 +64,7 @@ export default async function SettingsPage() {
                 </div>
               ))}
               <p className="border-t pt-2.5 text-xs text-text-3">
-                Keys live in the API&apos;s environment — they never reach the browser.
+                Keys live in the API&apos;s environment and never reach the browser.
               </p>
             </CardContent>
           </Card>

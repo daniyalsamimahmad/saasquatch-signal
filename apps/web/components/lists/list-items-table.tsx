@@ -21,7 +21,8 @@ import {
 import { EmailStatusBadge, SignalChip } from "@/components/find/lead-badges";
 import { AddToCampaignDialog } from "@/components/find/add-to-campaign-dialog";
 
-export function ListItemsTable({
+/** Header actions: lives in the PageHeader so the table starts right away. */
+export function ListToolbar({
   list,
   campaigns,
 }: {
@@ -34,12 +35,6 @@ export function ListItemsTable({
   const contactIds = list.items
     .map((item) => item.contact?.id)
     .filter((id): id is string => !!id);
-
-  const remove = async (itemId: string) => {
-    const result = await removeListItem(list.id, itemId);
-    if (!result.ok) toast.error(result.error);
-    else router.refresh();
-  };
 
   const exportCsv = () => {
     if (list.kind === "people") {
@@ -84,6 +79,40 @@ export function ListItemsTable({
     }
   };
 
+  if (list.items.length === 0) return null;
+
+  return (
+    <>
+      {list.kind === "people" && contactIds.length > 0 && (
+        <Button size="sm" onClick={() => setCampaignOpen(true)}>
+          <Send className="size-3.5" aria-hidden />
+          Add all to campaign
+        </Button>
+      )}
+      <Button size="sm" variant="outline" onClick={exportCsv}>
+        <FileDown className="size-3.5" aria-hidden />
+        Export CSV
+      </Button>
+      <AddToCampaignDialog
+        open={campaignOpen}
+        onOpenChange={setCampaignOpen}
+        campaigns={campaigns}
+        contactIds={contactIds}
+        onAdded={() => router.refresh()}
+      />
+    </>
+  );
+}
+
+export function ListItemsTable({ list }: { list: ListDetail }) {
+  const router = useRouter();
+
+  const remove = async (itemId: string) => {
+    const result = await removeListItem(list.id, itemId);
+    if (!result.ok) toast.error(result.error);
+    else router.refresh();
+  };
+
   if (list.items.length === 0) {
     return (
       <div className="rounded-lg border border-dashed py-14 text-center">
@@ -102,19 +131,6 @@ export function ListItemsTable({
 
   return (
     <>
-      <div className="mb-2 flex flex-wrap items-center justify-end gap-2">
-        {list.kind === "people" && contactIds.length > 0 && (
-          <Button size="sm" onClick={() => setCampaignOpen(true)}>
-            <Send className="size-3.5" aria-hidden />
-            Add all to campaign
-          </Button>
-        )}
-        <Button size="sm" variant="outline" onClick={exportCsv}>
-          <FileDown className="size-3.5" aria-hidden />
-          Export CSV
-        </Button>
-      </div>
-
       <div className="overflow-x-auto rounded-lg border">
         {list.kind === "people" ? (
           <Table>
@@ -237,14 +253,6 @@ export function ListItemsTable({
           </Table>
         )}
       </div>
-
-      <AddToCampaignDialog
-        open={campaignOpen}
-        onOpenChange={setCampaignOpen}
-        campaigns={campaigns}
-        contactIds={contactIds}
-        onAdded={() => router.refresh()}
-      />
     </>
   );
 }

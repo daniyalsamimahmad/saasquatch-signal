@@ -27,7 +27,7 @@ export function PlanPicker({ current }: { current: Plan }) {
       toast.error(result.error);
       return;
     }
-    toast.success(`Switched to the ${plan[0].toUpperCase()}${plan.slice(1)} plan. Billing is simulated — nothing was charged.`);
+    toast.success(`Switched to the ${plan[0].toUpperCase()}${plan.slice(1)} plan. Billing is simulated, so nothing was charged.`);
     router.refresh();
   };
 

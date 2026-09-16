@@ -44,7 +44,7 @@ export default async function CampaignsPage() {
           <p className="mt-3 text-sm font-medium">No campaigns yet</p>
           <p className="mx-auto mt-1 max-w-md text-sm text-text-2">
             Describe your offer in four fields and the AI designs the whole
-            sequence — emails, a LinkedIn touch, and the follow-up cadence.
+            sequence: emails, a LinkedIn touch, and the follow-up cadence.
           </p>
           <Button asChild size="sm" className="mt-4">
             <Link href="/campaigns/new">

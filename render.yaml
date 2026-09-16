@@ -1,0 +1,45 @@
+# Render Blueprint: API + Redis on the free tier.
+#
+# Free-tier shape: no separate background workers, so the API runs its
+# BullMQ processors in-process (INLINE_WORKER=1) — the same switch dev
+# uses. Postgres lives on Neon (paste its connection string on apply);
+# the web app deploys to Vercel separately with API_URL pointing here.
+#
+# Values marked sync:false are entered in the Render dashboard during
+# "Apply Blueprint" and never touch the repo.
+
+services:
+  - type: web
+    name: saasquatch-api
+    runtime: docker
+    rootDir: apps/api
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: INLINE_WORKER
+        value: "1"
+      - key: WEB_ORIGIN
+        value: https://saasquatch-signal.vercel.app,http://localhost:3000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false # Neon connection string (the direct one, not -pooler)
+      - key: APOLLO_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: saasquatch-redis
+          property: connectionString
+
+  # Cache + BullMQ queues. noeviction so queued follow-up jobs are never
+  # silently dropped when the 25MB free instance fills.
+  - type: keyvalue
+    name: saasquatch-redis
+    plan: free
+    ipAllowList: [] # internal-only; the API reaches it over the private network
+    maxmemoryPolicy: noeviction
